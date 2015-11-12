@@ -246,6 +246,7 @@ layers configuration. You are free to put any user code."
  (lambda () (setq truncate-lines nil)))
 
 (with-current-buffer (get-buffer-create "*scratch*")
+  (org-mode)
   (insert"
 ;;                __    ___     _____
 ;;   _______  ___/ /__ / _/__ _/ / (_)__  ___ _

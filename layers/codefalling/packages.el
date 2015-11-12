@@ -159,6 +159,12 @@
          "owf" 'plain-org-wiki)
        (require 'ob-js))
     )
+  ;; Resume clocking task when emacs is restarted
+  (org-clock-persistence-insinuate)
+  ;; Save the running clock and all clock history when exiting Emacs, load it on startup
+  (setq org-clock-persist t)
+  ;; Do not prompt to resume an active clock
+  (setq org-clock-persist-query-resume nil)
 
   )
 
