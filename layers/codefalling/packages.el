@@ -57,12 +57,19 @@
 
 
 (defun codefalling/post-init-org ()
-  (setq org-agenda-files (quote ("~/.spacemacs.d/org-notes" )))
+  (setq org-agenda-files (quote ("~/.spacemacs.d/org-notes" "~/.spacemacs.d/org-notes/inbox.txt")))
   (setq org-default-notes-file "~/.spacemacs.d/org-notes/gtd.org")
+  (setq org-todo-keywords
+        '((sequence "INBOX(i)" "TODO(t)" "|" "DONE(d)")
+          (sequence "REPORT(r)" "BUG(b)" "KNOWNCAUSE(k)" "|" "FIXED(f)")
+          (sequence "|" "CANCELED(c)")))
 
   (setq org-capture-templates
         '(("t" "Todo" entry (file+headline "~/.spacemacs.d/org-notes/gtd.org" "Daily Tasks")
            "* TODO %?\n  %i\n"
+           :empty-lines 1)
+          ("i" "Inbox" entry (file+headline "~/.spacemacs.d/org-notes/inbox.txt" "Inbox")
+           "* INBOX %?\n  %i\n"
            :empty-lines 1)
           ("n" "notes" entry (file+headline "~/.spacemacs.d/org-notes/notes.org" "Quick notes")
            "* TODO [#C] %?\n  %i\n %U"
@@ -86,6 +93,7 @@
 
   (setq org-agenda-custom-commands
         '(
+          ("i" "Inbox" todo "INBOX")
           ("w" . " 任务安排 ")
           ("wa" " 重要且紧急的任务 " tags-todo "+PRIORITY=\"A\"")
           ("wb" " 重要且不紧急的任务 " tags-todo "-Weekly-Monthly-Daily+PRIORITY=\"B\"")
@@ -114,8 +122,8 @@
     (interactive "P")
     (let* ((timerange-numeric-value (prefix-numeric-value timerange))
            (files (org-add-archive-files (org-agenda-files)))
-           (include-tags'("WORK" "EMACS" "DREAM" "WRITING" "MEETING"
-                           "LIFE" "PROJECT" "OTHER"))
+           (include-tags'("PROG" "EMACS" "DREAM" "WRITING" "MEETING"
+                           "LIFE" "PROJECT"))
            (tags-time-alist (mapcar (lambda (tag) `(,tag . 0)) include-tags))
            (output-string "")
            (tstart (or tstart
