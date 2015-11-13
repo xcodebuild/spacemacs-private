@@ -17,7 +17,6 @@
         ;; package names go here
         org-mac-link
         fcitx
-        rainbow-blocks
         realgud
         org-bullets
         org
@@ -33,11 +32,6 @@
     :defer t
     :init (add-hook'org-mode-hook (lambda () (require 'org-mac-link)))
     ))
-
-(defun codefalling/init-rainbow-blocks  ()
-  (use-package rainbow-blocks
-    :defer t
-    :init (add-hook 'emacs-lisp-mode-hook 'rainbow-blocks-mode)))
 
 (defun codefalling/init-realgud  ()
   (use-package realgud
@@ -57,37 +51,43 @@
 
 
 (defun codefalling/post-init-org ()
-  (setq org-agenda-files (quote ("~/.spacemacs.d/org-notes" "~/.spacemacs.d/org-notes/inbox.txt")))
-  (setq org-default-notes-file "~/.spacemacs.d/org-notes/gtd.org")
+  (setq org-agenda-files (quote ("~/Dropbox/org-notes/inbox.txt" "~/Dropbox/org-notes/gtd.org")))
+
+  (setq org-default-notes-file "~/Dropbox/org-notes/gtd.org")
   (setq org-todo-keywords
         '((sequence "INBOX(i)" "TODO(t)" "|" "DONE(d)")
           (sequence "REPORT(r)" "BUG(b)" "KNOWNCAUSE(k)" "|" "FIXED(f)")
           (sequence "|" "CANCELED(c)")))
 
+  (setq org-refile-targets
+        '(("gtd.org" :maxlevel . 1)))
+
+  (setq org-log-into-drawer t)
+
   (setq org-capture-templates
-        '(("t" "Todo" entry (file+headline "~/.spacemacs.d/org-notes/gtd.org" "Daily Tasks")
+        '(("t" "Todo" entry (file+headline "~/Dropbox/org-notes/gtd.org" "Daily Tasks")
            "* TODO %?\n  %i\n"
            :empty-lines 1)
-          ("i" "Inbox" entry (file+headline "~/.spacemacs.d/org-notes/inbox.txt" "Inbox")
+          ("i" "Inbox" entry (file+headline "~/Dropbox/org-notes/inbox.txt" "Inbox")
            "* INBOX %?\n  %i\n"
            :empty-lines 1)
-          ("n" "notes" entry (file+headline "~/.spacemacs.d/org-notes/notes.org" "Quick notes")
+          ("n" "notes" entry (file+headline "~/Dropbox/org-notes/notes.org" "Quick notes")
            "* TODO [#C] %?\n  %i\n %U"
            :empty-lines 1)
-          ("b" "Blog Ideas" entry (file+headline "~/.spacemacs.d/org-notes/notes.org" "Blog Ideas")
+          ("b" "Blog Ideas" entry (file+headline "~/Dropbox/org-notes/notes.org" "Blog Ideas")
            "* TODO %?\n  %i\n %U"
            :empty-lines 1)
-          ("w" "work" entry (file+headline "~/.spacemacs.d/org-notes/gtd.org" "Programming")
+          ("w" "work" entry (file+headline "~/Dropbox/org-notes/gtd.org" "Programming")
            "* TODO %?\n  %i\n %U"
            :empty-lines 1)
-          ("c" "Chrome" entry (file+headline "~/.spacemacs.d/org-notes/notes.org" "Quick notes")
+          ("c" "Chrome" entry (file+headline "~/Dropbox/org-notes/notes.org" "Quick notes")
            "* TODO %?\n %(zilongshanren/retrieve-chrome-current-tab-url)\n %i\n %U"
            :empty-lines 1)
-          ("l" "links" entry (file+headline "~/.spacemacs.d/org-notes/notes.org" "Quick notes")
+          ("l" "links" entry (file+headline "~/Dropbox/org-notes/notes.org" "Quick notes")
            "* TODO %?\n  %i\n %a \n %U"
            :empty-lines 1)
           ("j" "Journal Entry"
-           entry (file+datetree "~/.spacemacs.d/org-notes/journal.org")
+           entry (file+datetree "~/Dropbox/org-notes/journal.org")
            "* %?"
            :empty-lines 1)))
 
