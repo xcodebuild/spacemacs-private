@@ -7,3 +7,4 @@
   (setq auto-mode-alist (cons '("\\.markdown$" . gfm-mode) auto-mode-alist)))
 
 (add-to-list 'auto-mode-alist '("\\inbox.txt\\'" . org-mode))
+

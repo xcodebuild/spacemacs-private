@@ -125,3 +125,5 @@ org-files and bookmarks"
                   ("Open Blog" . (lambda() (browse-url "http://codefalling.com")))))
    (candidate-number-limit)
    (action . (("Open" . (lambda (x) (funcall x)))))))
+
+

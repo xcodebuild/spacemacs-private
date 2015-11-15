@@ -20,6 +20,7 @@
         realgud
         org-bullets
         org
+        uimage
       ))
 
 ;; List of packages to exclude.
@@ -27,13 +28,21 @@
 
 ;; For each package, define a function codefalling/init-<package-name>
 ;;
+
 (defun codefalling/init-org-mac-link  ()
   (use-package org-mac-link
     :defer t
     :init (add-hook'org-mode-hook (lambda () (require 'org-mac-link)))
     ))
 
-(defun codefalling/init-realgud  ()
+(defun codefalling/init-uimage ()
+  (use-package uimage
+    :defer t
+    :init (add-hook 'org-mode-hook 'uimage-mode)
+    ))
+
+(defun codefalling/init-realgud-disable-for-now  ()
+  "disable for now"
   (use-package realgud
     :defer t
     :init (load-library "realgud")
@@ -45,6 +54,7 @@
     :init
     (fcitx-aggressive-setup)
     ))
+
 
 (defun codefalling/post-init-org-bullets ()
   (setq org-bullets-bullet-list '("☰" "☷" "⋗" "⇀")))
@@ -71,19 +81,19 @@
           ("i" "Inbox" entry (file+headline "~/Dropbox/org-notes/inbox.txt" "Inbox")
            "* INBOX %?\n  %i\n"
            :empty-lines 1)
-          ("n" "notes" entry (file+headline "~/Dropbox/org-notes/notes.org" "Quick notes")
+          ("n" "notes" entry (file+headline "~/Dropbox/org-notes/gtd.org" "Quick notes")
            "* TODO [#C] %?\n  %i\n %U"
            :empty-lines 1)
-          ("b" "Blog Ideas" entry (file+headline "~/Dropbox/org-notes/notes.org" "Blog Ideas")
+          ("b" "Blog Ideas" entry (file+headline "~/Dropbox/org-notes/gtd.org" "Blog Ideas")
            "* TODO %?\n  %i\n %U"
            :empty-lines 1)
           ("w" "work" entry (file+headline "~/Dropbox/org-notes/gtd.org" "Programming")
            "* TODO %?\n  %i\n %U"
            :empty-lines 1)
-          ("c" "Chrome" entry (file+headline "~/Dropbox/org-notes/notes.org" "Quick notes")
+          ("c" "Chrome" entry (file+headline "~/Dropbox/org-notes/gtd.org" "Quick notes")
            "* TODO %?\n %(zilongshanren/retrieve-chrome-current-tab-url)\n %i\n %U"
            :empty-lines 1)
-          ("l" "links" entry (file+headline "~/Dropbox/org-notes/notes.org" "Quick notes")
+          ("l" "links" entry (file+headline "~/Dropbox/org-notes/gtd.org" "Quick notes")
            "* TODO %?\n  %i\n %a \n %U"
            :empty-lines 1)
           ("j" "Journal Entry"
@@ -98,7 +108,7 @@
           ("wa" " 重要且紧急的任务 " tags-todo "+PRIORITY=\"A\"")
           ("wb" " 重要且不紧急的任务 " tags-todo "-Weekly-Monthly-Daily+PRIORITY=\"B\"")
           ("wc" " 不重要且紧急的任务 " tags-todo "+PRIORITY=\"C\"")
-          ("b" "Blog" tags-todo "BLOG")
+         ("b" "Blog" tags-todo "BLOG")
           ("p" . " 项目安排 ")
           ("pw" tags-todo "PROJECT+WORK+CATEGORY=\"programming\"")
           ("pl" tags-todo "PROJECT+DREAM+CATEGORY=\"codefalling\"")
@@ -122,7 +132,7 @@
     (interactive "P")
     (let* ((timerange-numeric-value (prefix-numeric-value timerange))
            (files (org-add-archive-files (org-agenda-files)))
-           (include-tags'("PROG" "EMACS" "DREAM" "WRITING" "MEETING"
+           (include-tags'("PROG" "EMACS" "DREAM" "WRITING" "MEETING" "BLOG"
                            "LIFE" "PROJECT"))
            (tags-time-alist (mapcar (lambda (tag) `(,tag . 0)) include-tags))
            (output-string "")
@@ -165,7 +175,9 @@
        (evil-leader/set-key-for-mode'org-mode
          "owh" 'plain-org-wiki-helm
          "owf" 'plain-org-wiki)
-       (require 'ob-js))
+       (require 'ob-js)
+       (require 'ob-shell)
+    )
     )
   ;; Resume clocking task when emacs is restarted
   (org-clock-persistence-insinuate)
