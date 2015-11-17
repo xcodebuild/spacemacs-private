@@ -8,3 +8,5 @@
 
 (add-to-list 'auto-mode-alist '("\\inbox.txt\\'" . org-mode))
 
+(setq erc-nick "codefalling")
+(setq erc-autojoin-channels-alist '(("freenode.net" "#emacs-cn")))

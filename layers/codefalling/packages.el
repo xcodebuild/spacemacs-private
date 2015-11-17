@@ -21,6 +21,8 @@
         org-bullets
         org
         uimage
+        erc
+        erc-image
       ))
 
 ;; List of packages to exclude.
@@ -57,6 +59,10 @@
 (defun codefalling/post-init-org-bullets ()
   (setq org-bullets-bullet-list '("☰" "☷" "⋗" "⇀")))
 
+(defun codefalling/post-init-erc-image ()
+  (add-to-list 'erc-modules 'image)
+  (erc-update-modules)
+  )
 
 (defun codefalling/post-init-org ()
   (setq org-agenda-dir "~/Dropbox/org-notes")
@@ -67,7 +73,7 @@
 
   (setq org-default-notes-file org-agenda-file-gtd)
   (setq org-todo-keywords
-        '((sequence "INBOX(i)" "TODO(t)" "|" "NOTE(n)""DONE(d)")
+        '((sequence "INBOX(i)" "TODO(t)" "|" "WAITTING(w)" "NOTE(n)""DONE(d)")
           (sequence "REPORT(r)" "BUG(b)" "KNOWNCAUSE(k)" "|" "FIXED(f)")
           (sequence "|" "CANCELED(c)")))
 

@@ -129,4 +129,8 @@ org-files and bookmarks"
    (candidate-number-limit)
    (action . (("Open" . (lambda (x) (funcall x)))))))
 
-
+(defun codefalling/start-erc ()
+  "Connect to IRC"
+  (interactive)
+  (when (y-or-n-p "Do you want to start IRC? ")
+    (erc :server "irc.freenode.net" :port 6667 :nick erc-nick)))
