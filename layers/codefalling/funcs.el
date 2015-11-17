@@ -18,10 +18,12 @@
   "create a hexo org post"
   (interactive "sInput post name:")
   (find-file (format "%s/source/_posts/%s.org" hexo-dir post-name))
-  (insert (format "title: '%s'
-date: %s
-tags:
----"  post-name (format-time-string "%Y-%m-%d %H:%M:%S"))))
+  (insert (format "#+TITLE: %s
+#+DATE: %s
+#+LAYOUT: post
+#+TAGS:
+#+CATEGORIES:
+"  post-name (format-time-string "<%Y-%m-%d %a %H:%M>"))))
 
 (defun codefalling/hexo-org-source ()
   "use dired open hexo source dir"
@@ -120,6 +122,7 @@ org-files and bookmarks"
   `((name . "codefalling's center")
    (candidates . (("Org-Capture" . (lambda () (org-capture)))
                   ("Agenda" . (lambda () (org-agenda "" "a")))
+                  ("Agenda Next TODO" . (lambda () (org-agenda "" "t")))
                   ("Agenda Menu" . (lambda () (org-agenda)))
                   ("Open Github" . (lambda() (browse-url "https://github.com/codefalling")))
                   ("Open Blog" . (lambda() (browse-url "http://codefalling.com")))))

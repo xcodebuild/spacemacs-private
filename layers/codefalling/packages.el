@@ -38,7 +38,6 @@
 (defun codefalling/init-uimage ()
   (use-package uimage
     :defer t
-    :init (add-hook 'org-mode-hook 'uimage-mode)
     ))
 
 (defun codefalling/init-realgud-disable-for-now  ()
@@ -55,17 +54,20 @@
     (fcitx-aggressive-setup)
     ))
 
-
 (defun codefalling/post-init-org-bullets ()
   (setq org-bullets-bullet-list '("☰" "☷" "⋗" "⇀")))
 
 
 (defun codefalling/post-init-org ()
-  (setq org-agenda-files (quote ("~/Dropbox/org-notes/inbox.txt" "~/Dropbox/org-notes/gtd.org")))
+  (setq org-agenda-dir "~/Dropbox/org-notes")
+  (setq org-agenda-file-gtd (expand-file-name "gtd.org" org-agenda-dir))
+  (setq org-agenda-file-inbox (expand-file-name "inbox.txt" org-agenda-dir))
 
-  (setq org-default-notes-file "~/Dropbox/org-notes/gtd.org")
+  (setq org-agenda-files `(,org-agenda-file-gtd ,org-agenda-file-inbox))
+
+  (setq org-default-notes-file org-agenda-file-gtd)
   (setq org-todo-keywords
-        '((sequence "INBOX(i)" "TODO(t)" "|" "DONE(d)")
+        '((sequence "INBOX(i)" "TODO(t)" "|" "NOTE(n)""DONE(d)")
           (sequence "REPORT(r)" "BUG(b)" "KNOWNCAUSE(k)" "|" "FIXED(f)")
           (sequence "|" "CANCELED(c)")))
 
@@ -75,25 +77,25 @@
   (setq org-log-into-drawer t)
 
   (setq org-capture-templates
-        '(("t" "Todo" entry (file+headline "~/Dropbox/org-notes/gtd.org" "Daily Tasks")
+        '(("t" "Todo" entry (file+headline org-agenda-file-gtd "Daily Tasks")
            "* TODO %?\n  %i\n"
            :empty-lines 1)
-          ("i" "Inbox" entry (file+headline "~/Dropbox/org-notes/inbox.txt" "Inbox")
+          ("i" "Inbox" entry (file+headline org-agenda-file-inbox "Inbox")
            "* INBOX %?\n  %i\n"
            :empty-lines 1)
-          ("n" "notes" entry (file+headline "~/Dropbox/org-notes/gtd.org" "Quick notes")
-           "* TODO [#C] %?\n  %i\n %U"
+          ("n" "Quick Notes" entry (file+headline org-agenda-file-gtd "Quick notes")
+           "* NOTE %?\n  %i\n %U"
            :empty-lines 1)
-          ("b" "Blog Ideas" entry (file+headline "~/Dropbox/org-notes/gtd.org" "Blog Ideas")
+          ("b" "Blog Ideas" entry (file+headline org-agenda-file-gtd "Blog Ideas")
            "* TODO %?\n  %i\n %U"
            :empty-lines 1)
-          ("w" "work" entry (file+headline "~/Dropbox/org-notes/gtd.org" "Programming")
+          ("w" "work" entry (file+headline org-agenda-file-gtd "Programming")
            "* TODO %?\n  %i\n %U"
            :empty-lines 1)
-          ("c" "Chrome" entry (file+headline "~/Dropbox/org-notes/gtd.org" "Quick notes")
+          ("c" "Chrome" entry (file+headline org-agenda-file-gtd "Quick notes")
            "* TODO %?\n %(zilongshanren/retrieve-chrome-current-tab-url)\n %i\n %U"
            :empty-lines 1)
-          ("l" "links" entry (file+headline "~/Dropbox/org-notes/gtd.org" "Quick notes")
+          ("l" "links" entry (file+headline org-agenda-file-gtd "Quick notes")
            "* TODO %?\n  %i\n %a \n %U"
            :empty-lines 1)
           ("j" "Journal Entry"
