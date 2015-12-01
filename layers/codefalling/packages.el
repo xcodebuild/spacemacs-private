@@ -17,13 +17,17 @@
         ;; package names go here
         org-mac-link
         fcitx
-        realgud
+        ;; realgud
         org-bullets
         org
         uimage
         erc
         erc-image
-      ))
+        org-octopress
+        erc-colorize
+        hl-sexp
+        aggressive-indent
+        ))
 
 ;; List of packages to exclude.
 (setq codefalling-excluded-packages '())
@@ -31,10 +35,109 @@
 ;; For each package, define a function codefalling/init-<package-name>
 ;;
 
+
+
 (defun codefalling/init-org-mac-link  ()
   (use-package org-mac-link
     :defer t
     :init (add-hook'org-mode-hook (lambda () (require 'org-mac-link)))
+    ))
+
+(defun codefalling/init-org-octopress ()
+  (use-package org-octopress
+    :config
+    (progn
+      (setq org-octopress-directory-top       "~/blog/source")
+      (setq org-octopress-directory-posts     "~/blog/source/_posts")
+      (setq org-octopress-directory-org-top   "~/blog/source")
+      (setq org-octopress-directory-org-posts "~/blog/source/_posts")
+      )
+
+    ;; rewrite in org-octopress.el
+    (defun org-octopress--summary-table (contents keymap)
+      (let ((param (copy-ctbl:param ctbl:default-rendering-param)))
+        (ctbl:create-table-component-region
+         :param param
+         :width  nil
+         :height nil
+         :keymap keymap
+         :model
+         (make-ctbl:model
+          :data contents
+          :sort-state '(-1 2)
+          :column-model
+          (list (make-ctbl:cmodel
+                 :title "Date"
+                 :sorter 'ctbl:sort-string-lessp
+                 :min-width 10
+                 :align 'left)
+                (make-ctbl:cmodel
+                 :title "Category"
+                 :align 'left
+                 :sorter 'ctbl:sort-string-lessp)
+                (make-ctbl:cmodel
+                 :title "Title"
+                 :align 'left
+                 :min-width 40
+                 :max-width 140)
+                )))))
+    (define-key org-octopress-summary-mode-map "w" 'codefalling/hexo-org-new-open-post)
+
+    (defun org-octopress--scan-post ()
+      (mapcar
+       (lambda (filename)
+         (org-jekyll-property
+          '(:date
+            :jekyll-categories
+            :title
+            :input-file)
+          filename))
+       (directory-files
+        (expand-file-name
+         org-octopress-directory-org-posts) t "^.*\\.org$")))
+
+    (defun org-octopress (&optional title)
+      "Org-mode and Octopress."
+      (interactive)
+      (setq org-octopress-summary-buffer (get-buffer-create "Octopress"))
+      (switch-to-buffer org-octopress-summary-buffer)
+      (setq buffer-read-only nil)
+      (erase-buffer)
+      (insert (org-octopress--summary-header title))
+      (save-excursion
+        (setq org-octopress-component (org-octopress--summary-table
+                                       (org-octopress--scan-post) org-octopress-summary-mode-map)))
+      (ctbl:cp-add-click-hook
+       org-octopress-component
+       (lambda ()
+         (find-file (nth 3 (ctbl:cp-get-selected-data-row org-octopress-component)))))
+      (org-octopress-summary-mode)
+      (ctbl:navi-goto-cell
+       (ctbl:find-first-cell (ctbl:component-dest org-octopress-component)))
+      )
+
+    ;; rewrite in ox-jekyll.el
+    (defcustom org-jekyll-date ""
+      "Default date used in Jekyll article."
+      :group 'org-export-jekyll
+      :type 'string)
+    (org-export-define-derived-backend'jekyll 'html
+                                              :export-block '("HTML" "JEKYLL")
+                                              :menu-entry
+                                              '(?j "Jekyll: export to HTML with YAML front matter."
+                                                   ((?H "As HTML buffer" org-jekyll-export-as-html)
+                                                    (?h "As HTML file" org-jekyll-export-to-html)))
+                                              :translate-alist
+                                              '((template . org-jekyll-template) ;; add YAML front matter.
+                                                (src-block . org-jekyll-src-block)
+                                                (inner-template . org-jekyll-inner-template)) ;; force body-only
+                                              :options-alist
+                                              '((:jekyll-layout "LAYOUT" nil org-jekyll-layout)
+                                                (:jekyll-categories "CATEGORIES" nil org-jekyll-categories)
+                                                (:jekyll-tags "TAGS" nil org-jekyll-tags)
+                                                (:date "DATE" nil org-jekyll-date)
+                                                (:jekyll-published "PUBLISHED" nil org-jekyll-published)
+                                                (:jekyll-comments "COMMENTS" nil org-jekyll-comments)))
     ))
 
 (defun codefalling/init-uimage ()
@@ -42,11 +145,30 @@
     :defer t
     ))
 
-(defun codefalling/init-realgud-disable-for-now  ()
-  "disable for now"
+(defun codefalling/init-realgud ()
   (use-package realgud
     :defer t
     :init (load-library "realgud")
+    ))
+
+(defun codefalling/init-erc-colorize ()
+  (use-package colorize
+    :defer t
+    :init (add-hook 'erc-mode-hook 'erc-colorize-mode)
+    ))
+(defun codefalling/init-hl-sexp ()
+  (use-package hl-sexp
+    :defer t
+    :init
+    (progn
+      (add-hook 'lisp-mode-hook 'hl-sexp-mode)
+      (add-hook 'emacs-lisp-mode-hook 'hl-sexp-mode)
+      )))
+
+(defun codefalling/post-init-aggressive-indent ()
+  (progn
+    (add-hook 'emacs-lisp-mode-hook #'aggressive-indent-mode)
+    (add-hook 'css-mode-hook #'aggressive-indent-mode)
     ))
 
 (defun codefalling/init-fcitx  ()
@@ -56,13 +178,9 @@
     (fcitx-aggressive-setup)
     ))
 
+
 (defun codefalling/post-init-org-bullets ()
   (setq org-bullets-bullet-list '("☰" "☷" "⋗" "⇀")))
-
-(defun codefalling/post-init-erc-image ()
-  (add-to-list 'erc-modules 'image)
-  (erc-update-modules)
-  )
 
 (defun codefalling/post-init-org ()
   (setq org-agenda-dir "~/Dropbox/org-notes")
@@ -98,12 +216,6 @@
           ("w" "work" entry (file+headline org-agenda-file-gtd "Programming")
            "* TODO %?\n  %i\n %U"
            :empty-lines 1)
-          ("c" "Chrome" entry (file+headline org-agenda-file-gtd "Quick notes")
-           "* TODO %?\n %(zilongshanren/retrieve-chrome-current-tab-url)\n %i\n %U"
-           :empty-lines 1)
-          ("l" "links" entry (file+headline org-agenda-file-gtd "Quick notes")
-           "* TODO %?\n  %i\n %a \n %U"
-           :empty-lines 1)
           ("j" "Journal Entry"
            entry (file+datetree "~/Dropbox/org-notes/journal.org")
            "* %?"
@@ -116,7 +228,7 @@
           ("wa" " 重要且紧急的任务 " tags-todo "+PRIORITY=\"A\"")
           ("wb" " 重要且不紧急的任务 " tags-todo "-Weekly-Monthly-Daily+PRIORITY=\"B\"")
           ("wc" " 不重要且紧急的任务 " tags-todo "+PRIORITY=\"C\"")
-         ("b" "Blog" tags-todo "BLOG")
+          ("b" "Blog" tags-todo "BLOG")
           ("p" . " 项目安排 ")
           ("pw" tags-todo "PROJECT+WORK+CATEGORY=\"programming\"")
           ("pl" tags-todo "PROJECT+DREAM+CATEGORY=\"codefalling\"")
@@ -130,7 +242,7 @@
     (let (org-log-done org-log-states)  ; turn off logging
       (org-todo (if (= n-not-done 0) "DONE" "TODO"))))
 
- (add-hook'org-after-todo-statistics-hook 'org-summary-todo)
+  (add-hook'org-after-todo-statistics-hook 'org-summary-todo)
   ;; used by org-clock-sum-today-by-tags
   (defun filter-by-tags ()
     (let ((head-tags (org-get-tags-at)))
@@ -141,7 +253,7 @@
     (let* ((timerange-numeric-value (prefix-numeric-value timerange))
            (files (org-add-archive-files (org-agenda-files)))
            (include-tags'("PROG" "EMACS" "DREAM" "WRITING" "MEETING" "BLOG"
-                           "LIFE" "PROJECT"))
+                          "LIFE" "PROJECT"))
            (tags-time-alist (mapcar (lambda (tag) `(,tag . 0)) include-tags))
            (output-string "")
            (tstart (or tstart
@@ -173,7 +285,7 @@
         (insert output-string))
       output-string))
 
-  (eval-after-load'org
+  (eval-after-load 'org
     '(progn
        (global-set-key (kbd "C-c a") 'org-agenda)
        (define-key org-mode-map (kbd "s-p") 'org-priority)
@@ -181,11 +293,11 @@
        (global-set-key (kbd "C-c b") 'org-iswitchb)
        (define-key evil-normal-state-map (kbd "C-c C-w") 'org-refile)
        (evil-leader/set-key-for-mode'org-mode
-         "owh" 'plain-org-wiki-helm
-         "owf" 'plain-org-wiki)
+        "owh" 'plain-org-wiki-helm
+        "owf" 'plain-org-wiki)
        (require 'ob-js)
        (require 'ob-shell)
-    )
+       )
     )
   ;; Resume clocking task when emacs is restarted
   (org-clock-persistence-insinuate)
@@ -193,9 +305,14 @@
   (setq org-clock-persist t)
   ;; Do not prompt to resume an active clock
   (setq org-clock-persist-query-resume nil)
-
   )
 
+(defun codefalling/post-init-erc ()
+  (defun codefalling//erc-notify (matched-type nick msg)
+    (codefalling//notify nick msg))
+
+  (add-hook 'erc-text-matched-hook 'codefalling//erc-notify)
+  )
 
 ;; Often the body of an initialize function uses `use-package'
 ;; For more info on `use-package', see readme:

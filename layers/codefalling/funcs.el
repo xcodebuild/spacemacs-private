@@ -120,7 +120,9 @@ org-files and bookmarks"
 (defun codefalling//hotspots-sources ()
   "Construct the helm sources for my hotspots"
   `((name . "codefalling's center")
-   (candidates . (("Org-Capture" . (lambda () (org-capture)))
+    (candidates . (("Org-Capture" . (lambda () (org-capture)))
+                   ("Blog" . (lambda() (org-octopress)))
+                   ("ERC" . (lambda () (codefalling/start-erc)))
                   ("Agenda" . (lambda () (org-agenda "" "a")))
                   ("Agenda Next TODO" . (lambda () (org-agenda "" "t")))
                   ("Agenda Menu" . (lambda () (org-agenda)))
@@ -133,4 +135,15 @@ org-files and bookmarks"
   "Connect to IRC"
   (interactive)
   (when (y-or-n-p "Do you want to start IRC? ")
-    (erc :server "irc.freenode.net" :port 6667 :nick erc-nick)))
+    (erc :server "irc.freenode.net" :port 6666 :nick erc-nick)))
+
+
+(defun codefalling//notify (title message)
+  (let ((terminal-notifier-command (executable-find "terminal-notifier")))
+    (start-process "terminal-notifier"
+                   "*terminal-notifier*"
+                   terminal-notifier-command
+                   "-title" title
+                   "-message" message
+                   "-activate" "org.gnu.Emacs"
+                   "-sender" "org.gnu.Emacs")))

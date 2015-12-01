@@ -38,6 +38,7 @@ values."
      javascript
      org
      erc
+     gnus
      ;; (shell :variables
      ;;        shell-default-height 30
      ;;        shell-default-position 'bottom)
@@ -48,14 +49,15 @@ values."
      (chinese :variables
               chinese-enable-youdao-dict t
               chinese-enable-avy-pinyin t)
+
      )
+
 
    ;; List of additional packages that will be installed without being
    ;; wrapped in a layer. If you need some configuration for these
    ;; packages then consider to create a layer, you can also put the
    ;; configuration in `dotspacemacs/config'.
    dotspacemacs-additional-packages '(
-                                      monokai-theme
                                       )
    ;; A list of packages and/or extensions that will not be install and loaded.
    dotspacemacs-excluded-packages '(
@@ -95,12 +97,13 @@ values."
    ;; List of themes, the first of the list is loaded when spacemacs starts.
    ;; Press <SPC> T n to cycle to the next theme in the list (works great
    ;; with 2 themes variants, one dark and one light)
+   dotspacemacs-elpa-https nil
    dotspacemacs-themes '(
                          farmhouse-dark
+                         solarized-light
                          spacemacs-dark
                          farmhouse-light
                          wombat
-                         solarized-light
                          spacemacs-light
                          solarized-dark
                          leuven
@@ -141,7 +144,7 @@ values."
    ;; If non nil then `ido' replaces `helm' for some commands. For now only
    ;; `find-files' (SPC f f), `find-spacemacs-file' (SPC f e s), and
    ;; `find-contrib-file' (SPC f e c) are replaced. (default nil)
-   dotspacemacs-use-ido nil
+   dotspacemacs-use-ido t
    ;; If non nil, `helm' will try to miminimize the space it uses. (default nil)
    dotspacemacs-helm-resize nil
    ;; if non nil, the helm header is hidden when there is only one source.
@@ -174,7 +177,7 @@ values."
    ;; If non nil the frame is maximized when Emacs starts up.
    ;; Takes effect only if `dotspacemacs-fullscreen-at-startup' is nil.
    ;; (default nil) (Emacs 24.4+ only)
-   dotspacemacs-maximized-at-startup nil
+   dotspacemacs-maximized-at-startup t
    ;; A value from the range (0..100), in increasing opacity, which describes
    ;; the transparency level of a frame when it's active or selected.
    ;; Transparency can be toggled through `toggle-transparency'. (default 90)
@@ -217,10 +220,13 @@ user code."
   (setq tramp-ssh-controlmaster-options "-o ControlMaster=auto -o ControlPath='tramp.%%C' -o ControlPersist=no")
 
   (setq shell-file-name "bash")
-  (setq url-proxy-services
-        '(("no_proxy" . "^\\(localhost\\|10.*\\)")
-          ("http" . "127.0.0.1:9501")))
-)
+  ;; (setq url-proxy-services
+  ;;       '(("no_proxy" . "^\\(localhost\\|10.*\\)")
+  ;;         ("http" . "127.0.0.1:9501")))
+
+  (setq socks-server '("Default server" "127.0.0.1" 9500 5))
+  (setq url-gateway-method 'socks)
+  )
 
 (defun dotspacemacs/user-config ()
   "Configuration function for user code.
@@ -228,30 +234,30 @@ user code."
 layers configuration. You are free to put any user code."
   (global-company-mode)
 
- (custom-set-faces
-    '(org-level-1 ((t (:inherit outline-3 :height 1.0))))
-    '(org-level-2 ((t (:inherit outline-3 :height 1.0))))
-    '(org-level-3 ((t (:inherit outline-3 :height 1.0))))
-    '(org-level-4 ((t (:inherit outline-3 :height 1.0))))
-    '(org-level-5 ((t (:inherit outline-3 :height 1.0))))
-    '(org-level-6 ((t (:inherit outline-3 :height 1.0))))
-    '(org-level-7 ((t (:inherit outline-3 :height 1.0))))
-    '(org-level-8 ((t (:inherit outline-3 :height 1.0))))
-    '(org-level-9 ((t (:inherit outline-3 :height 1.0))))
-    '(org-level-10 ((t (:inherit outline-3 :height 1.0))))
-    )
+  (custom-set-faces
+   '(org-level-1 ((t (:inherit outline-3 :height 1.0 ))))
+   '(org-level-2 ((t (:inherit outline-3 :height 1.0 ))))
+   '(org-level-3 ((t (:inherit outline-3 :height 1.0 ))))
+   '(org-level-4 ((t (:inherit outline-3 :height 1.0 ))))
+   '(org-level-5 ((t (:inherit outline-3 :height 1.0 ))))
+   '(org-level-6 ((t (:inherit outline-3 :height 1.0 ))))
+   '(org-level-7 ((t (:inherit outline-3 :height 1.0 ))))
+   '(org-level-8 ((t (:inherit outline-3 :height 1.0 ))))
+   '(org-level-9 ((t (:inherit outline-3 :height 1.0 ))))
+   '(org-level-10 ((t (:inherit outline-3 :height 1.0))))
+   )
 
 
-(setq-default js2-basic-offset 2)
-(setq-default js-indent-level 2)
+  (setq-default js2-basic-offset 2)
+  (setq-default js-indent-level 2)
 
-;; turn on soft wrapping mode for org mode
-(add-hook'org-mode-hook
- (lambda () (setq truncate-lines nil)))
+  ;; turn on soft wrapping mode for org mode
+  (add-hook'org-mode-hook
+   (lambda () (setq truncate-lines nil)))
 
-(with-current-buffer (get-buffer-create "*scratch*")
-  (org-mode)
-  (insert"
+  (with-current-buffer (get-buffer-create "*scratch*")
+    (org-mode)
+    (insert"
 ;;                __    ___     _____
 ;;   _______  ___/ /__ / _/__ _/ / (_)__  ___ _
 ;;  / __/ _ \\/ _  / -_) _/ _ `/ / / / _ \\/ _ `/
@@ -260,26 +266,8 @@ layers configuration. You are free to put any user code."
 
 "))
 
-(spacemacs/toggle-mode-line-org-clock-on)
-)
+  (spacemacs/toggle-mode-line-org-clock-on)
 
-;; fullscreen at startup
-(custom-set-variables
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(initial-frame-alist (quote ((fullscreen . maximized))))
- '(package-selected-packages
-   (quote
-    (emoji-cheat-sheet-plus company-emoji avy helm magit uimage erc-yt erc-view-log erc-terminal-notifier erc-social-graph erc-image erc-hl-nicks mew persp-mode markdown-mode js2-mode gitignore-mode evil-indent-plus company evil-leader evil package-build bind-key s dash monokai-theme youdao-dictionary ws-butler window-numbering which-key web-beautify volatile-highlights vi-tilde-fringe use-package toc-org spray spacemacs-theme spaceline smooth-scrolling smeargle reveal-in-osx-finder restart-emacs realgud rainbow-delimiters quelpa popwin pcre2el pbcopy paradox pangu-spacing page-break-lines osx-trash org-repo-todo org-present org-pomodoro org-plus-contrib org-mac-link org-bullets open-junk-file neotree move-text mmm-mode markdown-toc magit-gitflow macrostep lorem-ipsum linum-relative leuven-theme launchctl json-mode js2-refactor js-doc info+ indent-guide ido-vertical-mode hungry-delete htmlize highlight-parentheses highlight-numbers highlight-indentation helm-themes helm-swoop helm-projectile helm-mode-manager helm-make helm-gitignore helm-flx helm-descbinds helm-company helm-c-yasnippet helm-ag google-translate golden-ratio gnuplot gitconfig-mode gitattributes-mode git-timemachine git-messenger gh-md flx-ido find-by-pinyin-dired fill-column-indicator fcitx farmhouse-theme fancy-battery expand-region exec-path-from-shell evil-visualstar evil-tutor evil-surround evil-search-highlight-persist evil-numbers evil-nerd-commenter evil-mc evil-matchit evil-magit evil-lisp-state evil-jumper evil-indent-textobject evil-iedit-state evil-exchange evil-escape evil-args evil-anzu eval-sexp-fu elisp-slime-nav diff-hl define-word company-tern company-statistics company-quickhelp coffee-mode clean-aindent-mode chinese-pyim buffer-move auto-yasnippet auto-highlight-symbol auto-compile aggressive-indent adaptive-wrap ace-window ace-pinyin ace-link ace-jump-helm-line ac-ispell))))
+  (set-fontset-font "fontset-default" 'han '("Ubuntu Mono"))
 
-;; Do not write anything past this comment. This is where Emacs will
-;; auto-generate custom variable definitions.
-(custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(company-tooltip-common ((t (:inherit company-tooltip :weight bold :underline nil))))
- '(company-tooltip-common-selection ((t (:inherit company-tooltip-selection :weight bold :underline nil)))))
+  )
