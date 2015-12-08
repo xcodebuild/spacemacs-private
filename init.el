@@ -37,8 +37,8 @@ values."
      markdown
      javascript
      org
-     erc
-     gnus
+     (elfeed :variables rmh-elfeed-org-files (list "~/Dropbox/org-notes/gtd.org"))
+
      ;; (shell :variables
      ;;        shell-default-height 30
      ;;        shell-default-position 'bottom)
@@ -220,12 +220,10 @@ user code."
   (setq tramp-ssh-controlmaster-options "-o ControlMaster=auto -o ControlPath='tramp.%%C' -o ControlPersist=no")
 
   (setq shell-file-name "bash")
-  ;; (setq url-proxy-services
-  ;;       '(("no_proxy" . "^\\(localhost\\|10.*\\)")
-  ;;         ("http" . "127.0.0.1:9501")))
+;;  (setq url-proxy-services
+;;        '(("no_proxy" . "^\\(localhos\\|10.*\\)")
+;;         ("http" . "127.0.0.1:9500")))
 
-  (setq socks-server '("Default server" "127.0.0.1" 9500 5))
-  (setq url-gateway-method 'socks)
   )
 
 (defun dotspacemacs/user-config ()
@@ -269,5 +267,6 @@ layers configuration. You are free to put any user code."
   (spacemacs/toggle-mode-line-org-clock-on)
 
   (set-fontset-font "fontset-default" 'han '("Ubuntu Mono"))
+
 
   )
