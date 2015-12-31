@@ -120,16 +120,16 @@ org-files and bookmarks"
 (defun codefalling//hotspots-sources ()
   "Construct the helm sources for my hotspots"
   `((name . "codefalling's center")
-    (candidates . (("Org-Capture" . (lambda () (org-capture)))
+    (candidates . (
+                   ("Agenda" . (lambda () (org-agenda "" "a")))
                    ("Blog" . (lambda() (org-octopress)))
-                   ("ERC" . (lambda () (codefalling/start-erc)))
-                  ("Agenda" . (lambda () (org-agenda "" "a")))
-                  ("Agenda Next TODO" . (lambda () (org-agenda "" "t")))
-                  ("Agenda Menu" . (lambda () (org-agenda)))
-                  ("Open Github" . (lambda() (browse-url "https://github.com/codefalling")))
-                  ("Open Blog" . (lambda() (browse-url "http://codefalling.com")))))
-   (candidate-number-limit)
-   (action . (("Open" . (lambda (x) (funcall x)))))))
+                   ("Elfeed" . (lambda () (elfeed)))
+                   ("Agenda Next TODO" . (lambda () (org-agenda "" "t")))
+                   ("Agenda Menu" . (lambda () (org-agenda)))
+                   ("Open Github" . (lambda() (browse-url "https://github.com/codefalling")))
+                   ("Open Blog" . (lambda() (browse-url "http://codefalling.com")))))
+    (candidate-number-limit)
+    (action . (("Open" . (lambda (x) (funcall x)))))))
 
 (defun codefalling/start-erc ()
   "Connect to IRC"
@@ -147,3 +147,18 @@ org-files and bookmarks"
                    "-message" message
                    "-activate" "org.gnu.Emacs"
                    "-sender" "org.gnu.Emacs")))
+
+(defun codefalling//org-archive-tasks (prefix)
+  (org-map-entries
+   (lambda ()
+     (org-archive-subtree)
+     (setq org-map-continue-from (outline-previous-heading)))
+   (format "/%s" prefix) 'file))
+
+
+(defun codefalling/org-archive-all-tasks ()
+  (interactive)
+  (codefalling//org-archive-tasks "DONE")
+  (codefalling//org-archive-tasks "CANCELLED")
+  (codefalling//org-archive-tasks "FIXED")
+  )

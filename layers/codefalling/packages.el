@@ -21,12 +21,12 @@
         org-bullets
         org
         uimage
-        erc
-        erc-image
         org-octopress
-        erc-colorize
         hl-sexp
         aggressive-indent
+        elfeed
+        sws-mode
+        org-caldav
         ))
 
 ;; List of packages to exclude.
@@ -36,6 +36,9 @@
 ;;
 
 
+(defun codefalling/init-org-caldav ()
+  (use-package org-caldav
+    ))
 
 (defun codefalling/init-org-mac-link  ()
   (use-package org-mac-link
@@ -185,15 +188,14 @@
 (defun codefalling/post-init-org ()
   (setq org-agenda-dir "~/Dropbox/org-notes")
   (setq org-agenda-file-gtd (expand-file-name "gtd.org" org-agenda-dir))
-  (setq org-agenda-file-inbox (expand-file-name "inbox.txt" org-agenda-dir))
-
-  (setq org-agenda-files `(,org-agenda-file-gtd ,org-agenda-file-inbox))
+  (setq org-agenda-file-gtd-archive (expand-file-name "gtd.org_archive" org-agenda-dir))
+  (setq org-agenda-files `(,org-agenda-file-gtd ,org-agenda-file-gtd-archive))
 
   (setq org-default-notes-file org-agenda-file-gtd)
   (setq org-todo-keywords
-        '((sequence "INBOX(i)" "TODO(t)" "|" "WAITTING(w)" "NOTE(n)""DONE(d)")
+        '((sequence "TODO(t)" "INBOX(i)" "|" "WAITTING(w)" "NOTE(n)""DONE(d)")
           (sequence "REPORT(r)" "BUG(b)" "KNOWNCAUSE(k)" "|" "FIXED(f)")
-          (sequence "|" "CANCELED(c)")))
+          (sequence "|" "CANCELLED(c)")))
 
   (setq org-refile-targets
         '(("gtd.org" :maxlevel . 1)))
@@ -204,7 +206,7 @@
         '(("t" "Todo" entry (file+headline org-agenda-file-gtd "Daily Tasks")
            "* TODO %?\n  %i\n"
            :empty-lines 1)
-          ("i" "Inbox" entry (file+headline org-agenda-file-inbox "Inbox")
+          ("i" "Inbox" entry (file+headline org-agenda-file-gtd "Inbox")
            "* INBOX %?\n  %i\n"
            :empty-lines 1)
           ("n" "Quick Notes" entry (file+headline org-agenda-file-gtd "Quick notes")
@@ -305,13 +307,17 @@
   (setq org-clock-persist t)
   ;; Do not prompt to resume an active clock
   (setq org-clock-persist-query-resume nil)
+
+  ;; Sync with google calander
+  (setq org-caldav-url "https://www.google.com/calendar/dav")
+  (setq org-caldav-calendar-id "code.falling@gmail.com")
+  (setq org-caldav-files org-agenda-files)
+  (setq org-icalendar-date-time-format ";TZID=%Z:%Y%m%dT%H%M%S")
+
   )
 
-(defun codefalling/post-init-erc ()
-  (defun codefalling//erc-notify (matched-type nick msg)
-    (codefalling//notify nick msg))
-
-  (add-hook 'erc-text-matched-hook 'codefalling//erc-notify)
+(defun codefalling/post-init-elfeed ()
+  (setq-default elfeed-search-filter "@1-week +unread")
   )
 
 ;; Often the body of an initialize function uses `use-package'

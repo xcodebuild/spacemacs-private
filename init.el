@@ -46,6 +46,7 @@ values."
      ;; syntax-checking
      version-control
      emoji
+     html
      (chinese :variables
               chinese-enable-youdao-dict t
               chinese-enable-avy-pinyin t)
@@ -201,7 +202,7 @@ values."
    dotspacemacs-highlight-delimiters 'all
    ;; If non nil advises quit functions to keep server open when quitting.
    ;; (default nil)
-   dotspacemacs-persistent-server nil
+   dotspacemacs-persistent-server t
    ;; List of search tool executable names. Spacemacs uses the first installed
    ;; tool of the list. Supported tools are `ag', `pt', `ack' and `grep'.
    ;; (default '("ag" "pt" "ack" "grep"))
@@ -220,9 +221,9 @@ user code."
   (setq tramp-ssh-controlmaster-options "-o ControlMaster=auto -o ControlPath='tramp.%%C' -o ControlPersist=no")
 
   (setq shell-file-name "bash")
-;;  (setq url-proxy-services
-;;        '(("no_proxy" . "^\\(localhos\\|10.*\\)")
-;;         ("http" . "127.0.0.1:9500")))
+  ;;  (setq url-proxy-services
+  ;;        '(("no_proxy" . "^\\(localhos\\|10.*\\)")
+  ;;         ("http" . "127.0.0.1:9500")))
 
   )
 
@@ -254,7 +255,7 @@ layers configuration. You are free to put any user code."
    (lambda () (setq truncate-lines nil)))
 
   (with-current-buffer (get-buffer-create "*scratch*")
-    (org-mode)
+    (emacs-lisp-mode)
     (insert"
 ;;                __    ___     _____
 ;;   _______  ___/ /__ / _/__ _/ / (_)__  ___ _
@@ -265,8 +266,5 @@ layers configuration. You are free to put any user code."
 "))
 
   (spacemacs/toggle-mode-line-org-clock-on)
-
-  (set-fontset-font "fontset-default" 'han '("Ubuntu Mono"))
-
-
+  (add-to-list 'after-make-frame-functions (lambda () (toggle-frame-maximized)))
   )
