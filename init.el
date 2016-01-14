@@ -23,6 +23,7 @@ values."
      ;; Uncomment some layer names and press <SPC f e R> (Vim style) or
      ;; <M-m f e R> (Emacs style) to install them.
      ;; ----------------------------------------------------------------
+     spacemacs-ivy
      codefalling
      osx
      (auto-completion :variables
@@ -37,8 +38,9 @@ values."
      markdown
      javascript
      org
-;;     (elfeed :variables rmh-elfeed-org-files (list 
-;;"~/Dropbox/org-notes/gtd.org"))
+
+     ;;     (elfeed :variables rmh-elfeed-org-files (list 
+     ;;"~/Dropbox/org-notes/gtd.org"))
 
      ;; (shell :variables
      ;;        shell-default-height 30
@@ -101,13 +103,14 @@ values."
    ;; with 2 themes variants, one dark and one light)
    dotspacemacs-elpa-https nil
    dotspacemacs-themes '(
+                         monokai
+                         solarized-dark
                          farmhouse-dark
                          solarized-light
                          spacemacs-dark
                          farmhouse-light
                          wombat
                          spacemacs-light
-                         solarized-dark
                          leuven
                          zenburn)
    ;; If non nil the cursor color matches the state color.
@@ -268,4 +271,30 @@ layers configuration. You are free to put any user code."
 
   (spacemacs/toggle-mode-line-org-clock-on)
   ;; (add-to-list 'after-make-frame-functions (lambda () (toggle-frame-maximized)))
+
   )
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(pyim-dicts
+   (quote
+    ((:name "BigDict-01" :file "/home/vagrant/.emacs.d/.cache/pyim-bigdict.pyim" :coding utf-8-unix :dict-type pinyin-dict)))))
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(company-tooltip-common ((t (:inherit company-tooltip :weight bold :underline nil))))
+ '(company-tooltip-common-selection ((t (:inherit company-tooltip-selection :weight bold :underline nil))))
+ '(org-level-1 ((t (:inherit outline-3 :height 1.0))))
+ '(org-level-10 ((t (:inherit outline-3 :height 1.0))))
+ '(org-level-2 ((t (:inherit outline-3 :height 1.0))))
+ '(org-level-3 ((t (:inherit outline-3 :height 1.0))))
+ '(org-level-4 ((t (:inherit outline-3 :height 1.0))))
+ '(org-level-5 ((t (:inherit outline-3 :height 1.0))))
+ '(org-level-6 ((t (:inherit outline-3 :height 1.0))))
+ '(org-level-7 ((t (:inherit outline-3 :height 1.0))))
+ '(org-level-8 ((t (:inherit outline-3 :height 1.0))))
+ '(org-level-9 ((t (:inherit outline-3 :height 1.0)))))
