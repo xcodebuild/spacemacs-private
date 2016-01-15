@@ -181,8 +181,8 @@
     ))
 
 
-;; (defun codefalling/post-init-org-bullets ()
-;;   (setq org-bullets-bullet-list '("☰" "☷" "⋗" "⇀")))
+(defun codefalling/post-init-org-bullets ()
+  (setq org-bullets-bullet-list '("☰" "☷" "⋗" "⇀")))
 
 (defun codefalling/post-init-org ()
   (setq org-agenda-dir "~/Dropbox/org-notes")

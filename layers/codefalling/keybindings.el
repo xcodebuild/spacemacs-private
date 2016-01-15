@@ -2,3 +2,4 @@
 
 ;;(define-key evil-leader--default-map "oy" 'youdao-dictionary-search-at-point+)
 (evil-leader/set-key "SPC" 'avy-goto-char)
+
