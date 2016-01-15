@@ -29,12 +29,11 @@
         org-caldav
         ))
 
-;; List of packages to exclude.
+;; List of packges to exclude.
 (setq codefalling-excluded-packages '())
 
 ;; For each package, define a function codefalling/init-<package-name>
 ;;
-
 
 (defun codefalling/init-org-caldav ()
   (use-package org-caldav
@@ -188,8 +187,9 @@
 (defun codefalling/post-init-org ()
   (setq org-agenda-dir "~/Dropbox/org-notes")
   (setq org-agenda-file-gtd (expand-file-name "gtd.org" org-agenda-dir))
+  (setq org-agenda-file-note (expand-file-name "note.org" org-agenda-dir))
   (setq org-agenda-file-gtd-archive (expand-file-name "gtd.org_archive" org-agenda-dir))
-  (setq org-agenda-files `(,org-agenda-file-gtd ,org-agenda-file-gtd-archive))
+  (setq org-agenda-files `(,org-agenda-file-gtd ,org-agenda-file-gtd-archive ,org-agenda-file-note))
 
   (setq org-default-notes-file org-agenda-file-gtd)
   (setq org-todo-keywords
@@ -209,7 +209,7 @@
           ("i" "Inbox" entry (file+headline org-agenda-file-gtd "Inbox")
            "* INBOX %?\n  %i\n"
            :empty-lines 1)
-          ("n" "Quick Notes" entry (file+headline org-agenda-file-gtd "Quick notes")
+          ("n" "Quick Notes" entry (file+headline org-agenda-file-note "Quick notes")
            "* NOTE %?\n  %i\n %U"
            :empty-lines 1)
           ("b" "Blog Ideas" entry (file+headline org-agenda-file-gtd "Blog Ideas")
