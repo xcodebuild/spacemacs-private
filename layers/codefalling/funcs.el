@@ -122,7 +122,8 @@ org-files and bookmarks"
   `((name . "codefalling's center")
     (candidates . (
                    ("Agenda" . (lambda () (org-agenda "" "a")))
-                   ("Blog" . (lambda() (org-octopress)))
+                   ("Blog" . (lambda() (blog-admin-start)))
+                   ("BlogBuild" . (lambda () (op/do-publication-and-preview-site "~/.op-tmp")))
                    ("Elfeed" . (lambda () (elfeed)))
                    ("Agenda Next TODO" . (lambda () (org-agenda "" "t")))
                    ("Agenda Menu" . (lambda () (org-agenda)))

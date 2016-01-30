@@ -23,7 +23,7 @@ values."
      ;; Uncomment some layer names and press <SPC f e R> (Vim style) or
      ;; <M-m f e R> (Emacs style) to install them.
      ;; ----------------------------------------------------------------
-     ;; Spacemacs-ivy
+     ;; spacemacs-ivy
      codefalling
      ;; osx
      (auto-completion :variables
@@ -38,9 +38,11 @@ values."
      markdown
      javascript
      org
-
-     ;;     (elfeed :variables rmh-elfeed-org-files (list 
-     ;;"~/Dropbox/org-notes/gtd.org"))
+     chrome
+     command-log
+     react
+     (elfeed :variables rmh-elfeed-org-files (list 
+                                              "~/Dropbox/org-notes/gtd.org"))
 
      ;; (shell :variables
      ;;        shell-default-height 30
@@ -48,8 +50,8 @@ values."
      ;; spell-checking
      ;; syntax-checking
      version-control
-     emoji
      html
+     dash
      (chinese :variables
               chinese-enable-youdao-dict t
               chinese-enable-avy-pinyin t)
@@ -62,6 +64,7 @@ values."
    ;; packages then consider to create a layer, you can also put the
    ;; configuration in `dotspacemacs/config'.
    dotspacemacs-additional-packages '(
+                                      org-page
                                       )
    ;; A list of packages and/or extensions that will not be install and loaded.
    dotspacemacs-excluded-packages '(
@@ -103,9 +106,9 @@ values."
    ;; with 2 themes variants, one dark and one light)
    dotspacemacs-elpa-https nil
    dotspacemacs-themes '(
+                         farmhouse-dark
                          monokai
                          solarized-dark
-                         farmhouse-dark
                          solarized-light
                          spacemacs-dark
                          farmhouse-light
@@ -118,7 +121,7 @@ values."
    ;; Default font. `powerline-scale' allows to quickly tweak the mode-line
    ;; size to make separators look not too crappy.
    dotspacemacs-default-font '("Ubuntu Mono"
-                               :size 18
+                               :size 20
                                :weight normal
                                :width normal
                                :powerline-scale 1.1)
@@ -192,7 +195,7 @@ values."
    ;; Transparency can be toggled through `toggle-transparency'. (default 90)
    dotspacemacs-inactive-transparency 90
    ;; If non nil unicode symbols are displayed in the mode line. (default t)
-   dotspacemacs-mode-line-unicode-symbols t
+   dotspacemacs-mode-line-unicode-symbols nil
    ;; If non nil smooth scrolling (native-scrolling) is enabled. Smooth
    ;; scrolling overrides the default behavior of Emacs which recenters the
    ;; point when it reaches the top or bottom of the screen. (default t)
@@ -229,6 +232,8 @@ user code."
   ;;        '(("no_proxy" . "^\\(localhos\\|10.*\\)")
   ;;         ("http" . "127.0.0.1:9500")))
 
+  (setq save-interprogram-paste-before-kill t)
+  (setq edit-server-host "0.0.0.0")
   )
 
 (defun dotspacemacs/user-config ()
@@ -237,22 +242,19 @@ user code."
 layers configuration. You are free to put any user code."
   (global-company-mode)
 
-  (custom-set-faces
-   '(org-level-1 ((t (:inherit outline-3 :height 1.0 ))))
-   '(org-level-2 ((t (:inherit outline-3 :height 1.0 ))))
-   '(org-level-3 ((t (:inherit outline-3 :height 1.0 ))))
-   '(org-level-4 ((t (:inherit outline-3 :height 1.0 ))))
-   '(org-level-5 ((t (:inherit outline-3 :height 1.0 ))))
-   '(org-level-6 ((t (:inherit outline-3 :height 1.0 ))))
-   '(org-level-7 ((t (:inherit outline-3 :height 1.0 ))))
-   '(org-level-8 ((t (:inherit outline-3 :height 1.0 ))))
-   '(org-level-9 ((t (:inherit outline-3 :height 1.0 ))))
-   '(org-level-10 ((t (:inherit outline-3 :height 1.0))))
-   )
+  ;; (custom-set-faces
+  ;;  '(org-level-1 ((t (:inherit outline-1 :height 1.0 ))))
+  ;;  '(org-level-2 ((t (:inherit outline-2 :height 1.0 ))))
+  ;;  '(org-level-3 ((t (:inherit outline-3 :height 1.0 ))))
+  ;;  '(org-level-4 ((t (:inherit outline-3 :height 1.0 ))))
+  ;;  '(org-level-5 ((t (:inherit outline-3 :height 1.0 ))))
+  ;;  '(org-level-6 ((t (:inherit outline-3 :height 1.0 ))))
+  ;;  '(org-level-7 ((t (:inherit outline-3 :height 1.0 ))))
+  ;;  '(org-level-8 ((t (:inherit outline-3 :height 1.0 ))))
+  ;;  '(org-level-9 ((t (:inherit outline-3 :height 1.0 ))))
+  ;;  '(org-level-10 ((t (:inherit outline-3 :height 1.0))))
+  ;;  )
 
-
-  (setq-default js2-basic-offset 2)
-  (setq-default js-indent-level 2)
 
   ;; turn on soft wrapping mode for org mode
   (add-hook'org-mode-hook
@@ -270,34 +272,23 @@ layers configuration. You are free to put any user code."
 "))
 
   (spacemacs/toggle-mode-line-org-clock-on)
+
+  (add-to-load-path "~/code/blog-admin")
+  (require 'blog-admin)
+
+  (setq blog-admin-backend-type 'org-page)
+  (setq blog-admin-backend-path "~/blog-org")
+  (setq blog-admin-backend-new-post-in-drafts t)
+  (setq blog-admin-backend-new-post-with-same-name-dir t)
+  (setq blog-admin-backend-org-page-drafts "_drafts")
+
+  ;; (setq blog-admin-backend-type 'hexo)
+  ;; (setq blog-admin-backend-path "~/blog")
+  ;; (setq blog-admin-backend-new-post-in-drafts t)
+  ;; (setq blog-admin-backend-new-post-with-same-name-dir t)
+
   ;; (add-to-list 'after-make-frame-functions (lambda () (toggle-frame-maximized)))
 
-  (unless window-system
-    ;; Callback for when user cuts
-    (defun xsel-cut-function (text &optional push)
-      ;; Insert text to temp-buffer, and "send" content to xsel stdin
-      (with-temp-buffer
-        (insert text)
-        ;; I prefer using the "clipboard" selection (the one the
-        ;; typically is used by c-c/c-v) before the primary selection
-        ;; (that uses mouse-select/middle-button-click)
-        (call-process-region (point-min) (point-max) "xsel" nil 0 nil "--clipboard" "--input")))
-    ;; Call back for when user pastes
-    (defun xsel-paste-function()
-      ;; Find out what is current selection by xsel. If it is different
-      ;; from the top of the kill-ring (car kill-ring), then return
-      ;; it. Else, nil is returned, so whatever is in the top of the
-      ;; kill-ring will be used.
-      (let ((xsel-output (shell-command-to-string "xsel --clipboard --output")))
-        (unless (string= (car kill-ring) xsel-output)
-          xsel-output )))
-    ;; Attach callbacks to hooks
-    (setq interprogram-cut-function 'xsel-cut-function)
-    (setq interprogram-paste-function 'xsel-paste-function)
-    ;; Idea from
-    ;; http://shreevatsa.wordpress.com/2006/10/22/emacs-copypaste-and-x/
-    ;; http://www.mail-archive.com/help-gnu-emacs@gnu.org/msg03577.html
-    )
 
   )
 (custom-set-variables
@@ -305,23 +296,16 @@ layers configuration. You are free to put any user code."
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
+ '(package-selected-packages
+   (quote
+    (org-page command-log-mode showkey smex counsel nlinum nameless gmail-message-mode edit-server org-mac-link livid-mode htmlize haml-mode gitignore-mode git-gutter+ evil-ediff bind-key evil f s dash avy git-gutter company projectile helm helm-core yasnippet js2-mode markdown-mode magit hydra package-build bind-map elfeed-web elfeed-org elfeed-goodies elfeed fcitx zeal-at-point youdao-dictionary ws-butler window-numbering which-key web-mode web-beautify volatile-highlights vi-tilde-fringe use-package uimage toc-org tagedit spacemacs-theme spaceline smooth-scrolling smeargle slim-mode scss-mode sass-mode restart-emacs rainbow-delimiters quelpa popwin persp-mode pcre2el paradox pangu-spacing page-break-lines orgit org-repo-todo org-present org-pomodoro org-plus-contrib org-octopress org-caldav org-bullets open-junk-file neotree move-text monokai-theme mmm-mode markdown-toc magit-gitflow macrostep lorem-ipsum linum-relative leuven-theme less-css-mode json-mode js2-refactor js-doc jade-mode info+ indent-guide ido-vertical-mode hungry-delete hl-todo hl-sexp highlight-parentheses highlight-numbers highlight-indentation help-fns+ helm-themes helm-swoop helm-projectile helm-mode-manager helm-make helm-gitignore helm-flx helm-descbinds helm-dash helm-css-scss helm-company helm-c-yasnippet helm-ag google-translate golden-ratio gnuplot gitconfig-mode gitattributes-mode git-timemachine git-messenger git-gutter-fringe git-gutter-fringe+ gh-md flx-ido find-by-pinyin-dired fill-column-indicator farmhouse-theme fancy-battery expand-region exec-path-from-shell evil-visualstar evil-tutor evil-surround evil-search-highlight-persist evil-numbers evil-nerd-commenter evil-mc evil-matchit evil-magit evil-lisp-state evil-jumper evil-indent-plus evil-iedit-state evil-exchange evil-escape evil-args evil-anzu eval-sexp-fu emoji-cheat-sheet-plus emmet-mode elisp-slime-nav diff-hl define-word company-web company-tern company-statistics company-quickhelp company-emoji coffee-mode clean-aindent-mode chinese-pyim buffer-move bracketed-paste auto-yasnippet auto-highlight-symbol auto-compile aggressive-indent adaptive-wrap ace-window ace-pinyin ace-link ace-jump-helm-line ac-ispell)))
  '(pyim-dicts
    (quote
-    ((:name "BigDict-01" :file "/home/vagrant/.emacs.d/.cache/pyim-bigdict.pyim" :coding utf-8-unix :dict-type pinyin-dict)))))
+    ((:name "CS" :file "/home/codefalling/.emacs.d/.cache/CS.pyim" :coding utf-8 :dict-type pinyin-dict)))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(company-tooltip-common ((t (:inherit company-tooltip :weight bold :underline nil))))
- '(company-tooltip-common-selection ((t (:inherit company-tooltip-selection :weight bold :underline nil))))
- '(org-level-1 ((t (:inherit outline-3 :height 1.0))))
- '(org-level-10 ((t (:inherit outline-3 :height 1.0))))
- '(org-level-2 ((t (:inherit outline-3 :height 1.0))))
- '(org-level-3 ((t (:inherit outline-3 :height 1.0))))
- '(org-level-4 ((t (:inherit outline-3 :height 1.0))))
- '(org-level-5 ((t (:inherit outline-3 :height 1.0))))
- '(org-level-6 ((t (:inherit outline-3 :height 1.0))))
- '(org-level-7 ((t (:inherit outline-3 :height 1.0))))
- '(org-level-8 ((t (:inherit outline-3 :height 1.0))))
- '(org-level-9 ((t (:inherit outline-3 :height 1.0)))))
+ '(company-tooltip-common-selection ((t (:inherit company-tooltip-selection :weight bold :underline nil)))))

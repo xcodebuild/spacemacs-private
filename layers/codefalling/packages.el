@@ -16,7 +16,7 @@
       '(
         ;; package names go here
         org-mac-link
-        ;; fcitx
+        fcitx
         ;; realgud
         org-bullets
         org
@@ -26,7 +26,9 @@
         aggressive-indent
         elfeed
         sws-mode
-        org-caldav
+        helm-dash
+        nameless
+        org-page
         ))
 
 ;; List of packges to exclude.
@@ -35,8 +37,64 @@
 ;; For each package, define a function codefalling/init-<package-name>
 ;;
 
-(defun codefalling/init-org-caldav ()
-  (use-package org-caldav
+(defun codefalling/init-org-page ()
+  (use-package org-page
+    :init
+    (progn
+      (setq op/repository-directory "~/blog-org")
+      (setq op/site-domain "https://codefalling.com/")
+      (setq op/personal-disqus-shortname "codefalling")
+      (setq op/personal-google-analytics-id "UA-72449503-1")
+      (setq op/theme 'mdo)
+      (setq op/site-main-title "M-x codefalling")
+      (setq op/site-sub-title "coding")
+      (setq op/personal-github-link "https://github.com/codefalling")
+
+      (defun op/generate-force-hexo-uri (default-uri-template creation-date title)
+        "Generate URI like hexo"
+        (let ((uri-template (or (op/read-org-option "URI")
+                                default-uri-template))
+              (filename (f-no-ext (f-filename buffer-file-name)))
+              (date-list (split-string (if creation-date
+                                           (fix-timestamp-string creation-date)
+                                         (format-time-string "%Y-%m-%d"))
+                                       "-"))
+              (encoded-title (encode-string-to-url title)))
+          (format-spec uri-template `((?y . ,(car date-list))
+                                      (?m . ,(cadr date-list))
+                                      (?d . ,(caddr date-list))
+                                      (?t . ,filename)))))
+
+
+      (setq op/category-config-alist
+            '(("blog" ;; this is the default configuration
+               :show-meta t
+               :show-comment t
+               :uri-generator op/generate-force-hexo-uri
+               :uri-template "/%y/%m/%d/%t/"
+               :sort-by :date     ;; how to sort the posts
+               :category-index t) ;; generate category index or not
+              ("index"
+               :show-meta nil
+               :show-comment nil
+               :uri-generator op/generate-uri
+               :uri-template "/"
+               :sort-by :date
+               :category-index nil)
+              ("about"
+               :show-meta nil
+               :show-comment nil
+               :uri-generator op/generate-uri
+               :uri-template "/about/"
+               :sort-by :date
+               :category-index nil)))
+      )
+    ))
+
+(defun codefalling/init-nameless ()
+  (use-package nameless
+    :defer t
+    :init (add-hook 'emacs-lisp-mode-hook #'nameless-mode-from-hook)
     ))
 
 (defun codefalling/init-org-mac-link  ()
@@ -318,6 +376,10 @@
 
 (defun codefalling/post-init-elfeed ()
   (setq-default elfeed-search-filter "@1-week +unread")
+  )
+
+(defun codefalling/post-init-helm-dash ()
+  (setq helm-dash-browser-func 'eww)
   )
 
 ;; Often the body of an initialize function uses `use-package'
