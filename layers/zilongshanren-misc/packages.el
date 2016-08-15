@@ -50,57 +50,49 @@
     (define-key global-map (kbd "<f1>") 'hydra-hotspots/body)
     (spacemacs/set-leader-keys "oo" 'hydra-hotspots/body)
 
-    ;; (progn
-;;       ;; major mode hydra is really cool, don't need to switch mode anymore
-;;       ;; C-c [a-z] and s-[a-z] is very quick to pressed even in emacs-state and F1-F9 is also the same
-;;       ;; If the command will change the buffer, they should be put in these groups.
-;;       ;; otherwise, use which-key + spacems + user defined key mappings in evil normal mode
-;;       (defhydra hydra-yasnippet (:color blue :hint nil)
-;;         "
-;;              ^YASnippets^
-;; --------------------------------------------
-;;  Modes:    Load/Visit:    Actions:
+    (defhydra multiple-cursors-hydra (:hint nil)
+      "
+           ^Up^            ^Down^        ^Other^
+      ----------------------------------------------
+      [_p_]   Next    [_n_]   Next    [_l_] Edit lines
+      [_P_]   Skip    [_N_]   Skip    [_a_] Mark all
+      [_M-p_] Unmark  [_M-n_] Unmark  [_r_] Mark by regexp
+      ^ ^             ^ ^             [_q_] Quit
+      "
+      ("l" mc/edit-lines :exit t)
+      ("a" mc/mark-all-like-this :exit t)
+      ("n" mc/mark-next-like-this)
+      ("N" mc/skip-to-next-like-this)
+      ("M-n" mc/unmark-next-like-this)
+      ("p" mc/mark-previous-like-this)
+      ("P" mc/skip-to-previous-like-this)
+      ("M-p" mc/unmark-previous-like-this)
+      ("r" mc/mark-all-in-region-regexp :exit t)
+      ("q" nil))
 
-;; _g_lobal  _d_irectory    _i_nsert
-;; _m_inor   _f_ile         _t_ryout
-;; _e_xtra   _l_ist         _n_ew
-;;         _a_ll
-;; "
-;;         ("d" yas-load-directory)
-;;         ("e" yas-activate-extra-mode)
-;;         ("i" yas-insert-snippet)
-;;         ("f" yas-visit-snippet-file :color blue)
-;;         ("n" yas-new-snippet)
-;;         ("t" yas-tryout-snippet)
-;;         ("l" yas-describe-tables)
-;;         ("g" yas/global-mode)
-;;         ("m" yas/minor-mode)
-;;         ("a" yas-reload-all))
+    (defhydra hydra-apropos (:color blue)
+      "Apropos"
+      ("a" apropos "apropos")
+      ("c" apropos-command "cmd")
+      ("d" apropos-documentation "doc")
+      ("e" apropos-value "val")
+      ("l" apropos-library "lib")
+      ("o" apropos-user-option "option")
+      ("u" apropos-user-option "option")
+      ("v" apropos-variable "var")
+      ("i" info-apropos "info")
+      ("t" tags-apropos "tags")
+      ("z" hydra-customize-apropos/body "customize"))
 
+    (defhydra hydra-customize-apropos (:color blue)
+      "Apropos (customize)"
+      ("a" customize-apropos "apropos")
+      ("f" customize-apropos-faces "faces")
+      ("g" customize-apropos-groups "groups")
+      ("o" customize-apropos-options "options"))
 
-;;       (defhydra hydra-apropos (:color blue)
-;;         "Apropos"
-;;         ("a" apropos "apropos")
-;;         ("c" apropos-command "cmd")
-;;         ("d" apropos-documentation "doc")
-;;         ("e" apropos-value "val")
-;;         ("l" apropos-library "lib")
-;;         ("o" apropos-user-option "option")
-;;         ("u" apropos-user-option "option")
-;;         ("v" apropos-variable "var")
-;;         ("i" info-apropos "info")
-;;         ("t" tags-apropos "tags")
-;;         ("z" hydra-customize-apropos/body "customize"))
+    (bind-key*  "<f4>" 'hydra-apropos/body)
 
-;;       (defhydra hydra-customize-apropos (:color blue)
-;;         "Apropos (customize)"
-;;         ("a" customize-apropos "apropos")
-;;         ("f" customize-apropos-faces "faces")
-;;         ("g" customize-apropos-groups "groups")
-;;         ("o" customize-apropos-options "options"))
-
-;;       (bind-key*  "<f4>" 'hydra-apropos/body)
-;;       )
     ))
 
 (defun zilongshanren-misc/post-init-gist ()
@@ -388,6 +380,11 @@
     ;; (define-key evil-visual-state-map (kbd "x") 'er/expand-region)
     ;; (define-key evil-visual-state-map (kbd "X") 'er/contract-region)
     (define-key evil-visual-state-map (kbd "C-r") 'zilongshanren/evil-quick-replace)
+    (define-key evil-visual-state-map (kbd "mn") 'mc/mark-next-like-this)
+    (define-key evil-visual-state-map (kbd "mp") 'mc/mark-previous-like-this)
+    (define-key evil-visual-state-map (kbd "ma") 'mc/mark-all-like-this)
+    (define-key evil-visual-state-map (kbd "mf") 'mc/mark-all-like-this-in-defun)
+
 
     ;; in spacemacs, we always use evilify miscro state
     (evil-add-hjkl-bindings package-menu-mode-map 'emacs)
@@ -471,6 +468,10 @@
       (define-key endless/mc-map "\C-e" #'mc/edit-ends-of-lines)
       )
     :config
+    (setq mc/cmds-to-run-once
+          '(
+            counsel-M-x
+            zilongshanren/my-mc-mark-next-like-this))
     (setq mc/cmds-to-run-for-all
           '(
             electric-newline-and-maybe-indent
@@ -504,7 +505,8 @@
             org-self-insert-command
             sp-backward-delete-char
             sp-delete-char
-            sp-remove-active-pair-overlay))))
+            sp-remove-active-pair-overlay))
+    ))
 
 (defun zilongshanren-misc/post-init-persp-mode ()
   (when (fboundp 'spacemacs|define-custom-layout)
@@ -766,9 +768,22 @@
                           :caller 'my-find-file-in-git-repo))
             (message "%s is not a valid directory." repo)))
 
+        (defun my-open-file-in-external-app (file)
+          "Open file in external application."
+          (interactive)
+          (let ((file-path file))
+            (if file-path
+                (cond
+                 ((spacemacs/system-is-mswindows) (w32-shell-execute "open" (replace-regexp-in-string "/" "\\\\" file-path)))
+                 ((spacemacs/system-is-mac) (shell-command (format "open \"%s\"" file-path)))
+                 ((spacemacs/system-is-linux) (let ((process-connection-type nil))
+                                                (start-process "" nil "xdg-open" file-path))))
+              (message "No file associated to this buffer."))))
+
         (ivy-set-actions
          t
          '(("f" my-find-file-in-git-repo "find files")
+           ("!" my-open-file-in-external-app "Open file in external app")
            ("I" ivy-insert-action "insert")))
 
         ;; http://blog.binchen.org/posts/use-ivy-to-open-recent-directories.html

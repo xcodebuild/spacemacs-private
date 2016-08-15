@@ -201,6 +201,7 @@
       (add-hook
        'minibuffer-setup-hook
        'conditionally-enable-lispy)
+      (define-key lispy-mode-map (kbd "s-m") 'lispy-mark-symbol)
       (define-key lispy-mode-map (kbd "s-1") 'lispy-describe-inline)
       (define-key lispy-mode-map (kbd "s-k") 'lispy-splice)
       (define-key lispy-mode-map (kbd "s-2") 'lispy-arglist-inline))))
@@ -239,7 +240,7 @@
     (progn
       ;; (setq flycheck-display-errors-function 'flycheck-display-error-messages)
       (setq flycheck-display-errors-delay 0.4)
-      (setq flycheck-idle-change-delay 1.0)
+      (setq flycheck-idle-change-delay 2.0)
       ;; (remove-hook 'c-mode-hook 'flycheck-mode)
       ;; (remove-hook 'c++-mode-hook 'flycheck-mode)
       )))

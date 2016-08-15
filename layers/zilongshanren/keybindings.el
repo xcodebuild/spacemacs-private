@@ -22,6 +22,9 @@
 (global-set-key (kbd "C-c a") 'org-agenda)
 (define-key global-map (kbd "C-c y") 'youdao-dictionary-search-at-point+)
 (define-key global-map (kbd "<f9>") 'org-capture)
+(global-set-key (kbd "C-M-=") 'spacemacs/scale-up-font)
+(global-set-key (kbd "C-M--") 'spacemacs/scale-down-font)
+(global-set-key (kbd "C-M-0") 'spacemacs/reset-font-size)
 
 (global-set-key (kbd "C-c b") 'org-iswitchb)
 (global-set-key (kbd "C-c i e") 'spacemacs/auto-yasnippet-expand)
@@ -42,7 +45,8 @@
 (global-set-key (kbd "s-l") 'goto-line)
 (global-set-key (kbd "s-s") 'save-buffer)
 (global-set-key (kbd "C-`") 'toggle-input-method)
-
+(global-set-key (kbd "s-d") 'zilongshanren/my-mc-mark-next-like-this)
+(bind-key* "s-r" 'mc/reverse-regions)
 (global-set-key (kbd "<f5>") 'zilongshanren/run-current-file)
 
 ;; "http://endlessparentheses.com/transposing-keybinds-in-emacs.html?source=rss"
@@ -63,7 +67,7 @@
 ;; (bind-key* "s-k" 'scroll-other-window-down)
 ;; (bind-key* "s-j"  'scroll-other-window)
 (bind-key* "C-c /" 'company-files)
-(bind-key* "s-r" 'zilongshanren/browser-refresh--chrome-applescript)
+;; (bind-key* "s-r" 'zilongshanren/browser-refresh--chrome-applescript)
 (bind-key* "s-;" 'zilongshanren/insert-semicolon-at-the-end-of-this-line)
 (bind-key* "C-s-;" 'zilongshanren/delete-semicolon-at-the-end-of-this-line)
 (bind-key* "s-," 'zilongshanren/insert-comma-at-the-end-of-this-line)
@@ -121,6 +125,7 @@
 (spacemacs/set-leader-keys "bmd" 'bookmark-delete)
 
 (spacemacs/set-leader-keys "od" 'occur-dwim)
+(spacemacs/set-leader-keys "ox" 'org-open-at-point)
 (spacemacs/set-leader-keys "oac" 'zilongshanren/browser-refresh--chrome-applescript)
 
 ;; helm specific keybindings
@@ -151,6 +156,7 @@
 (spacemacs/set-leader-keys "nl" 'spacemacs/evil-search-clear-highlight)
 (spacemacs/set-leader-keys "oll" 'zilongshanren/load-my-layout)
 (spacemacs/set-leader-keys "ols" 'zilongshanren/save-my-layout)
+(spacemacs/set-leader-keys "ob" 'popwin:display-last-buffer)
 
 (bind-key* "s-p" 'find-file-in-project)
 (spacemacs/set-leader-keys "os" 'zilongshanren/search-in-fireball)

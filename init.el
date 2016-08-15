@@ -61,7 +61,7 @@
    '(counsel-projectile magit-gh-pulls magit-gitflow org-projectile evil-mc
                         evil-args evil-ediff evil-exchange evil-unimpaired
                         evil-indent-plus centered-buffer-mode volatile-highlights
-                        smartparens spaceline holy-mode skewer-mode
+                        smartparens spaceline holy-mode skewer-mode rainbow-delimiters
                         highlight-indentation vi-tilde-fringe eyebrowse hl-anything
                         org-bullets smooth-scrolling org-repo-todo org-download org-timer
                         livid-mode git-gutter git-gutter-fringe  evil-escape
@@ -69,7 +69,7 @@
                         ac-ispell ace-jump-mode auto-complete auto-dictionary
                         clang-format define-word google-translate disaster epic
                         fancy-battery neotree org-present orgit orglue spacemacs-theme
-                        helm-flyspell flyspell-correct-helm
+                        helm-flyspell flyspell-correct-helm clean-aindent-mode
                         helm-c-yasnippet ace-jump-helm-line helm-make helm-projectile
                         helm-themes helm-swoop helm-spacemacs-help smeargle
                         flyspell flyspell-mode flyspell-correct)
