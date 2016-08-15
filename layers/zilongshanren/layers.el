@@ -13,6 +13,6 @@
                                       zilongshanren-misc
                                       zilongshanren-programming
                                       zilongshanren-ui
-                                      zilongshanren-org
+                                      ;; zilongshanren-org
                                       zilongshanren-better-defaults
                                       ))

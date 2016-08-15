@@ -53,6 +53,7 @@
      (auto-completion :variables auto-completion-enable-sort-by-usage t
                       :disabled-for org markdown)
      zilongshanren
+     codefalling
      )
    dotspacemacs-additional-packages '(sicp)
    dotspacemacs-frozen-packages '()
@@ -70,7 +71,8 @@
                         fancy-battery neotree org-present orgit orglue spacemacs-theme
                         helm-flyspell flyspell-correct-helm
                         helm-c-yasnippet ace-jump-helm-line helm-make helm-projectile
-                        helm-themes helm-swoop helm-spacemacs-help smeargle)
+                        helm-themes helm-swoop helm-spacemacs-help smeargle
+                        flyspell flyspell-mode flyspell-correct)
    dotspacemacs-download-packages 'used
    dotspacemacs-delete-orphan-packages t))
 
@@ -85,10 +87,10 @@
    dotspacemacs-startup-lists '((recents . 5)
                                 (projects . 7))
    dotspacemacs-scratch-mode 'text-mode
-   dotspacemacs-themes '(solarized-light solarized-dark)
+   dotspacemacs-themes '(dracula solarized-light solarized-dark)
    dotspacemacs-colorize-cursor-according-to-state t
    dotspacemacs-default-font '("Source Code Pro"
-                               :size 14
+                               :size 15
                                :weight normal
                                :width normal
                                :powerline-scale 1.1)
@@ -119,7 +121,7 @@
    dotspacemacs-fullscreen-at-startup nil
    dotspacemacs-fullscreen-use-non-native nil
    dotspacemacs-maximized-at-startup t
-   dotspacemacs-active-transparency 90
+   dotspacemacs-active-transparency 95
    dotspacemacs-inactive-transparency 90
    dotspacemacs-show-transient-state-title t
    dotspacemacs-show-transient-state-color-guide t
@@ -155,13 +157,14 @@
 
 (defun dotspacemacs/user-config ()
   ;;解决org表格里面中英文对齐的问题
-  (when (configuration-layer/layer-usedp 'chinese)
-    (when (and (spacemacs/system-is-mac) window-system)
-      (spacemacs//set-monospaced-font "Source Code Pro" "Hiragino Sans GB" 14 16)))
+  ;; (when (configuration-layer/layer-usedp 'chinese)
+  ;;   (when (and (spacemacs/system-is-mac) window-system)
+  ;;     (spacemacs//set-monospaced-font "Source Code Pro" "Hiragino Sans GB" 14 16)))
 
   (fset 'evil-visual-update-x-selection 'ignore)
 
   (spacemacs|add-company-hook 'text-mode)
+  (spacemacs/toggle-transparency)
 
   (add-hook 'doc-view-mode-hook 'auto-revert-mode)
 
@@ -177,7 +180,8 @@
   ;; visual line mode will cause swiper slow...
   ;; (add-hook 'prog-mode-hook 'spacemacs/toggle-visual-line-navigation-on)
 
-  (add-hook 'text-mode-hook 'spacemacs/toggle-spelling-checking-on))
+  ;; (add-hook 'text-mode-hook 'spacemacs/toggle-spelling-checking-on)
+  )
 
 (setq custom-file (expand-file-name "custom.el" dotspacemacs-directory))
 (load custom-file 'no-error 'no-message)

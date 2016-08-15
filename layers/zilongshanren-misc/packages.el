@@ -30,7 +30,7 @@
         helm
         tiny
         smartparens
-        flyspell-correct
+        ;; flyspell-correct
         peep-dired
         markdown-mode
         swiper
