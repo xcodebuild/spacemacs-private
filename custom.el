@@ -42,6 +42,9 @@
  '(org-log-into-drawer t)
  '(org-pomodoro-play-sounds nil)
  '(org-reverse-note-order t)
+ '(package-selected-packages
+   (quote
+    (beacon centered-cursor-mode nlinum window-numbering tiny persp-mode lispy helm-ag git-messenger git-link find-file-in-project exec-path-from-shell counsel swiper company-anaconda color-identifiers-mode coffee-mode auto-yasnippet ace-link cider magit magit-popup with-editor helm helm-core ivy avy flycheck dash youdao-dictionary yapfify yaml-mode ws-butler which-key wgrep web-mode web-beautify visual-regexp-steroids uuidgen use-package toc-org tide tagedit solarized-theme smex slim-mode sicp scss-mode sass-mode reveal-in-osx-finder restart-emacs ranger rainbow-mode rainbow-identifiers queue quelpa pyvenv pytest pyenv-mode prodigy popwin pip-requirements peep-dired pcre2el pbcopy paradox osx-trash origami org-pomodoro org-plus-contrib open-junk-file nodejs-repl mwim move-text mmm-mode markdown-toc macrostep lua-mode live-py-mode linum-relative link-hint less-css-mode launchctl json-mode js2-refactor js-doc jade-mode ivy-hydra info+ indent-guide impatient-mode ido-vertical-mode ibuffer-projectile hy-mode hungry-delete hl-todo highlight-parentheses highlight-numbers help-fns+ helm-pydoc helm-mode-manager helm-gitignore helm-github-stars helm-flx helm-descbinds helm-css-scss helm-company golden-ratio gnuplot github-search github-clone github-browse-file gitconfig-mode gitattributes-mode git-timemachine git-commit gist flyspell-correct-ivy flycheck-pos-tip flx-ido fill-column-indicator expand-region evil-visualstar evil-visual-mark-mode evil-tutor evil-surround evil-search-highlight-persist evil-numbers evil-nerd-commenter evil-matchit evil-magit evil-iedit-state evil-anzu etags-select engine-mode emmet-mode elisp-slime-nav editorconfig dracula-theme discover-my-major deft cython-mode company-web company-tern company-statistics company-quickhelp company-c-headers column-enforce-mode cmake-font-lock clojure-snippets clj-refactor cider-eval-sexp-fu bind-map auto-highlight-symbol auto-compile async anaconda-mode aggressive-indent adaptive-wrap ace-window 4clojure)))
  '(paradox-github-token t)
  '(persp-auto-save-persps-to-their-file nil)
  '(ring-bell-function (quote ignore))
@@ -54,23 +57,3 @@
  '(web-mode-markup-indent-offset 2)
  '(ycmd-extra-conf-handler (quote load))
  '(ycmd-extra-conf-whitelist (quote ("~/cocos2d-x/*"))))
-(custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(ahs-definition-face ((t (:foreground "#d33682" :slant normal :weight bold))))
- '(ahs-face ((t (:foreground "#d33682" :weight bold))))
- '(command-log-command ((t (:foreground "dark magenta"))))
- '(command-log-key ((t (:foreground "dark cyan"))))
- '(company-tooltip-common ((t (:inherit company-tooltip :weight bold :underline nil))))
- '(company-tooltip-common-selection ((t (:inherit company-tooltip-selection :weight bold :underline nil))))
- '(git-gutter-fr:added ((t (:foreground "#859900" :weight bold :width extra-expanded))))
- '(iedit-occurrence ((t (:inherit cursor))))
- '(ivy-virtual ((t (:background "skyblue"))))
- '(js2-external-variable ((t (:foreground "plum3"))))
- '(mc/cursor-bar-face ((t (:background "chartreuse3"))))
- '(show-paren-match ((t (:background "dark gray" :foreground "#d33682" :weight bold))))
- '(sp-show-pair-match-face ((t (:background "#272822" :foreground "gray" :inverse-video t :weight normal)))))
-;; Do not write anything past this comment. This is where Emacs will
-;; auto-generate custom variable definitions.

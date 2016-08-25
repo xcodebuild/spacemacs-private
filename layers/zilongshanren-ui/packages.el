@@ -37,7 +37,7 @@
     (whitespace :location built-in)
     ;; if you wnat to use spaceline, please comment out zilong-mode-line
     ;; spaceline
-    ;; beacon
+    beacon
     ;; evil-vimish-fold
     )
   )

@@ -30,8 +30,8 @@
 ;;; Code:
 
 (defconst codefalling-packages
-  '(editorconfig
-    company
+  '(
+    nlinum
     )
   "The list of Lisp packages required by the codefalling layer.
 
@@ -60,13 +60,13 @@ Each entry is either:
       - A list beginning with the symbol `recipe' is a melpa
         recipe.  See: https://github.com/milkypostman/melpa#recipe-format")
 
-(defun codefalling/init-editorconfig ()
-  (use-package editorconfig
-    :config
-    (add-hook 'prog-mode 'editorconfig-apply)
-    ))
 
-(defun codefalling/post-init-company ()
-  (add-hook 'prog-mode 'company-mode))
+(defun codefalling/init-nlinum ()
+  (use-package nlinum
+    :init
+    (progn
+      (setq nlinum-format "%4d|")
+      (add-hook 'prog-mode-hook 'nlinum-mode)
+      )))
 
 ;;; packages.el ends here

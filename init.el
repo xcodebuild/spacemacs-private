@@ -10,36 +10,36 @@
      ivy
      ;; react
      better-defaults
-     github
+     ;; github
      osx
      ;; latex
      deft
      markdown
-     (vinegar :variables vinegar-reuse-dired-buffer t)
-     org
-     prodigy
-     search-engine
+     ;; (vinegar :variables vinegar-reuse-dired-buffer t)
+     ;; org
+     ;; prodigy
+     ;; search-engine
      (syntax-checking :variables syntax-checking-enable-by-default nil)
      (spell-checking :variables spell-checking-enable-by-default nil)
      yaml
      ;; (ruby :variables ruby-version-manager 'rvm)
-     (python :variables
-             python-test-runner '(nose pytest))
+     ;; (python :variables
+     ;;         python-test-runner '(nose pytest))
      lua
      html
      ;; command-log
      javascript
-     (typescript :variables
-                 typescript-fmt-on-save nil
-                 typescript-fmt-tool 'typescript-formatter)
+     ;; (typescript :variables
+     ;;             typescript-fmt-on-save nil
+     ;;             typescript-fmt-tool 'typescript-formatter)
      ;; restclient
      emacs-lisp
-     (clojure :variables clojure-enable-fancify-symbols t)
+     ;; (clojure :variables clojure-enable-fancify-symbols t)
      ranger
      ;; racket
      (spacemacs-layouts :variables layouts-enable-autosave nil
                         layouts-autosave-delay 300)
-     colors
+     ;; colors
      (git :variables
           git-magit-status-fullscreen t
           magit-push-always-verify nil
@@ -48,14 +48,14 @@
           magit-refs-show-commit-count 'all
           magit-revision-show-gravatars nil)
      (ibuffer :variables ibuffer-group-buffers-by 'projects)
-     (c-c++ :variables
-            c-c++-default-mode-for-headers 'c++-mode)
+     ;; (c-c++ :variables
+     ;;        c-c++-default-mode-for-headers 'c++-mode)
      (auto-completion :variables auto-completion-enable-sort-by-usage t
                       :disabled-for org markdown)
      zilongshanren
      codefalling
      )
-   dotspacemacs-additional-packages '(sicp)
+   dotspacemacs-additional-packages '(editorconfig)
    dotspacemacs-frozen-packages '()
    dotspacemacs-excluded-packages
    '(counsel-projectile magit-gh-pulls magit-gitflow org-projectile evil-mc
@@ -72,7 +72,7 @@
                         helm-flyspell flyspell-correct-helm clean-aindent-mode
                         helm-c-yasnippet ace-jump-helm-line helm-make helm-projectile
                         helm-themes helm-swoop helm-spacemacs-help smeargle
-                        flyspell flyspell-mode flyspell-correct)
+                        flyspell flyspell-mode flyspell-correct company-tern tern)
    dotspacemacs-download-packages 'used
    dotspacemacs-delete-orphan-packages t))
 
@@ -87,7 +87,7 @@
    dotspacemacs-startup-lists '((recents . 5)
                                 (projects . 7))
    dotspacemacs-scratch-mode 'text-mode
-   dotspacemacs-themes '(dracula solarized-light solarized-dark)
+   dotspacemacs-themes '(moe-dark dracula solarized-light solarized-dark)
    dotspacemacs-colorize-cursor-according-to-state t
    dotspacemacs-default-font '("Source Code Pro"
                                :size 15
@@ -176,6 +176,7 @@
   (when (configuration-layer/layer-usedp 'ivy)
     (setq projectile-switch-project-action
           'zilongshanren/open-file-with-projectile-or-counsel-git))
+  (add-hook 'prog-mode-hook 'company-mode)
 
   ;; visual line mode will cause swiper slow...
   ;; (add-hook 'prog-mode-hook 'spacemacs/toggle-visual-line-navigation-on)
