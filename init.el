@@ -12,8 +12,8 @@
      better-defaults
      ;; github
      osx
-     latex
-     deft
+;;     latex
+;;     deft
      markdown
      ;; (vinegar :variables vinegar-reuse-dired-buffer t)
      ;; org
@@ -21,12 +21,12 @@
      ;; search-engine
      (syntax-checking :variables syntax-checking-enable-by-default nil)
      (spell-checking :variables spell-checking-enable-by-default nil)
-     gtags
+;;     gtags
      yaml
      ;; (ruby :variables ruby-version-manager 'rvm)
      ;; (python :variables
      ;;         python-test-runner '(nose pytest))
-     lua
+;;     lua
      html
      javascript
      ;; (typescript :variables
@@ -35,8 +35,8 @@
      ;; restclient
      emacs-lisp
      ;; (clojure :variables clojure-enable-fancify-symbols t)
-     ranger
-     racket
+;;     ranger
+;;     racket
      (spacemacs-layouts :variables layouts-enable-autosave nil
                         layouts-autosave-delay 300)
      ;; colors
