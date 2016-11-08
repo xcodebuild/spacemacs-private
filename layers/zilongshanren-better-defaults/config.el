@@ -90,11 +90,14 @@
             kill-buffer-query-functions))
 
 ;; cleanup recent files
-(add-hook 'kill-emacs-hook #'(lambda () (progn
-                                     (and (fboundp 'recentf-cleanup)
-                                          (recentf-cleanup))
-                                     (and (fboundp 'projectile-cleanup-known-projects)
-                                          (projectile-cleanup-known-projects)))))
+(defun zilongshanren/cleanup-recentf-and-known-projects ()
+  (progn
+    (and (fboundp 'recentf-cleanup)
+         (recentf-cleanup))
+    (and (fboundp 'projectile-cleanup-known-projects)
+         (projectile-cleanup-known-projects))))
+
+(add-hook 'kill-emacs-hook #'zilongshanren/cleanup-recentf-and-known-projects)
 
 ;; change evil initial mode state
 (menu-bar-mode t)
@@ -132,7 +135,11 @@ Single Capitals as you type."
 (defun spacemacs/check-large-file ()
   (when (> (buffer-size) 500000)
     (progn (fundamental-mode)
-           (hl-line-mode -1))))
+           (hl-line-mode -1)))
+  (if (and (executable-find "wc")
+           (> (string-to-number (shell-command-to-string (format "wc -l %s" (buffer-file-name))))
+              5000))
+      (linum-mode -1)))
 
 (add-hook 'find-file-hook 'spacemacs/check-large-file)
 
@@ -141,11 +148,12 @@ Single Capitals as you type."
   "Create parent directory if not exists while visiting file."
   (unless (file-exists-p filename)
     (let ((dir (file-name-directory filename)))
-      (unless (file-exists-p dir)
-        (make-directory dir t)))))
+      (when dir
+        (unless (file-exists-p dir)
+          (make-directory dir t))))))
 
 (add-hook 'minibuffer-inactive-mode-hook
-          '(lambda() (set (make-local-variable 'semantic-mode) nil)))
+          #'(lambda() (set (make-local-variable 'semantic-mode) nil)))
 
 ;; http://trey-jackson.blogspot.com/2010/04/emacs-tip-36-abort-minibuffer-when.html
 (defun zilongshanren/stop-using-minibuffer ()

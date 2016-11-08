@@ -19,6 +19,8 @@
 (spacemacs|defvar-company-backends makefile-bsdmake-mode)
 (spacemacs|defvar-company-backends conf-unix-mode)
 (spacemacs|defvar-company-backends json-mode)
+(spacemacs|defvar-company-backends graphviz-dot-mode)
+(spacemacs|defvar-company-backends typescript-mode)
 
 (spacemacs|add-toggle iimage
   :status iimage-mode
@@ -64,7 +66,7 @@
     (untabify (point-min) (point-max)) nil))
 
 (add-hook 'c++-mode-hook
-          '(lambda ()
+          #'(lambda ()
              (add-hook 'write-contents-hooks
                        'zilongshanren/untabify-buffer nil t)))
 

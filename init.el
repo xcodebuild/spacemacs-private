@@ -6,9 +6,7 @@
    dotspacemacs-configuration-layer-path '()
    dotspacemacs-configuration-layers
    '(
-     helm
      ivy
-     react
      better-defaults
      ;; github
      osx
@@ -58,11 +56,11 @@
    dotspacemacs-additional-packages '(editorconfig)
    dotspacemacs-frozen-packages '()
    dotspacemacs-excluded-packages
-   '(counsel-projectile magit-gh-pulls magit-gitflow org-projectile evil-mc
+   '(magit-gh-pulls magit-gitflow org-projectile evil-mc
                         evil-args evil-ediff evil-exchange evil-unimpaired
-                        evil-indent-plus volatile-highlights
-                        smartparens spaceline holy-mode skewer-mode rainbow-delimiters
-                        highlight-indentation vi-tilde-fringe eyebrowse hl-anything
+                        evil-indent-plus volatile-highlights smartparens
+                        spaceline holy-mode skewer-mode rainbow-delimiters
+                        highlight-indentation vi-tilde-fringe eyebrowse
                         org-bullets smooth-scrolling org-repo-todo org-download org-timer
                         livid-mode git-gutter git-gutter-fringe  evil-escape
                         leuven-theme gh-md evil-lisp-state spray lorem-ipsum
@@ -70,8 +68,11 @@
                         clang-format define-word google-translate disaster epic
                         fancy-battery org-present orgit orglue spacemacs-theme
                         helm-flyspell flyspell-correct-helm clean-aindent-mode
-                        helm-c-yasnippet ace-jump-helm-line helm-make helm-projectile
-                        helm-themes helm-swoop helm-spacemacs-help smeargle)
+                        helm-c-yasnippet ace-jump-helm-line helm-make
+                        helm-themes helm-swoop helm-spacemacs-help smeargle
+                        ido-vertical-mode flx-ido company-quickhelp
+                        ;; window-purpose ivy-purpose helm-purpose spacemacs-purpose-popwin
+                        )
    dotspacemacs-install-packages 'used-only
    dotspacemacs-delete-orphan-packages t))
 
@@ -86,7 +87,7 @@
    dotspacemacs-startup-lists '((recents . 5)
                                 (projects . 7))
    dotspacemacs-scratch-mode 'text-mode
-   dotspacemacs-themes '(apropospriate-light monokai anti-zenburn zenburn dracula moe-dark solarized-light solarized-dark)
+   dotspacemacs-themes '(apropospriate-dark monokai anti-zenburn zenburn dracula moe-dark solarized-light solarized-dark)
    dotspacemacs-colorize-cursor-according-to-state t
    dotspacemacs-default-font '("Source Code Pro"
                                :size 14
@@ -98,7 +99,7 @@
    dotspacemacs-emacs-leader-key "M-m"
    dotspacemacs-major-mode-leader-key ","
    dotspacemacs-major-mode-emacs-leader-key "C-M-m"
-   dotspacemacs-emacs-command-key ":"
+   dotspacemacs-emacs-command-key "SPC"
    dotspacemacs-distinguish-gui-tab nil
    dotspacemacs-remap-Y-to-y$ t
    dotspacemacs-retain-visual-state-on-shift t
@@ -111,6 +112,7 @@
    dotspacemacs-auto-save-file-location 'cache
    dotspacemacs-max-rollback-slots 5
    dotspacemacs-helm-resize nil
+   dotspacemacs-switch-to-buffer-prefers-purpose t
    dotspacemacs-helm-no-header nil
    dotspacemacs-helm-position 'bottom
    dotspacemacs-enable-paste-transient-state nil
@@ -142,7 +144,7 @@
         '(("melpa-cn" . "https://elpa.zilongshanren.com/melpa/")
           ("org-cn"   . "https://elpa.zilongshanren.com/org/")
           ("gnu-cn"   . "https://elpa.zilongshanren.com/gnu/")))
- 
+
   ;; https://github.com/syl20bnr/spacemacs/issues/2705
   ;; (setq tramp-mode nil)
   (setq tramp-ssh-controlmaster-options
@@ -152,6 +154,9 @@
   (setq socks-server '("Default server" "127.0.0.1" 1080 5))
   (setq evil-shift-round nil)
   (setq byte-compile-warnings '(not obsolete))
+  (setq warning-minimum-level :error)
+  ;; hack for remove purpose mode
+  ;; (setq purpose-mode nil)
   )
 
 (defun dotspacemacs/user-config ()
@@ -162,7 +167,21 @@
   ;;   (when (and (spacemacs/system-is-mac) window-system)
   ;;     (spacemacs//set-monospaced-font "Source Code Pro" "Hiragino Sans GB" 14 16)))
 
+  ;; Setting Chinese Font
+  (when (and (spacemacs/system-is-mswindows) window-system)
+    (setq ispell-program-name "aspell")
+    (setq w32-pass-alt-to-system nil)
+    (setq w32-apps-modifier 'super)
+    (dolist (charset '(kana han symbol cjk-misc bopomofo))
+      (set-fontset-font (frame-parameter nil 'font)
+                        charset
+                        (font-spec :family "Microsoft Yahei" :size 14))))
+
   (fset 'evil-visual-update-x-selection 'ignore)
+
+  ;; force horizontal split window
+  (setq split-width-threshold 120)
+  (linum-relative-on)
 
   (spacemacs|add-company-hook 'text-mode)
   (spacemacs/toggle-transparency)
@@ -178,39 +197,45 @@
   (spacemacs|diminish which-key-mode)
   (spacemacs|diminish spacemacs-whitespace-cleanup-mode)
 
-  ;; https://emacs-china.org/t/ranger-golden-ratio/964/2
-  (defun my-ranger ()
-    (interactive)
-    (if golden-ratio-mode
-        (progn
-          (golden-ratio-mode -1)
-          (ranger)
-          (setq golden-ratio-previous-enable t))
-      (progn
-        (ranger)
-        (setq golden-ratio-previous-enable nil))))
-
-  (defun my-quit-ranger ()
-    (interactive)
-    (if golden-ratio-previous-enable
-        (progn
-          (ranger-close)
-          (golden-ratio-mode 1))
-      (ranger-close)))
-
-  (with-eval-after-load 'ranger
-    (progn
-      (define-key ranger-normal-mode-map (kbd "q") 'my-quit-ranger)))
-
-  (spacemacs/set-leader-keys "ar" 'my-ranger)
+  (evilified-state-evilify-map special-mode-map :mode special-mode)
 
   (when (configuration-layer/layer-usedp 'ivy)
     (setq projectile-switch-project-action
           'zilongshanren/open-file-with-projectile-or-counsel-git))
   (add-hook 'prog-mode-hook 'company-mode)
+  (add-to-list 'auto-mode-alist
+               '("Capstanfile\\'" . yaml-mode))
 
-  ;; visual line mode will cause swiper slow...
-  ;; (add-hook 'prog-mode-hook 'spacemacs/toggle-visual-line-navigation-on)
+  (defun js-indent-line ()
+    "Indent the current line as JavaScript."
+    (interactive)
+    (let* ((parse-status
+            (save-excursion (syntax-ppss (point-at-bol))))
+           (offset (- (point) (save-excursion (back-to-indentation) (point)))))
+      (if (nth 3 parse-status)
+          'noindent
+        (indent-line-to (js--proper-indentation parse-status))
+        (when (> offset 0) (forward-char offset)))))
+
+  (global-set-key (kbd "<backtab>") 'un-indent-by-removing-4-spaces)
+  (defun un-indent-by-removing-4-spaces ()
+    "remove 4 spaces from beginning of of line"
+    (interactive)
+    (save-excursion
+      (save-match-data
+        (beginning-of-line)
+        ;; get rid of tabs at beginning of line
+        (when (looking-at "^\\s-+")
+          (untabify (match-beginning 0) (match-end 0)))
+        (when (looking-at (concat "^" (make-string tab-width ?\ )))
+          (replace-match "")))))
+
+  (defun zilongshanren/toggle-major-mode ()
+    (interactive)
+    (if (eq major-mode 'fundamental-mode)
+        (set-auto-mode)
+      (fundamental-mode)))
+  (spacemacs/set-leader-keys "otm" 'zilongshanren/toggle-major-mode)
 
   ;; (add-hook 'text-mode-hook 'spacemacs/toggle-spelling-checking-on)
   )

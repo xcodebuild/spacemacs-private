@@ -224,11 +224,10 @@ e.g. Sunday, September 17, 2000."
 
 (defun zilongshanren/open-file-with-projectile-or-counsel-git ()
   (interactive)
-  (if (zilongshanren/vcs-project-root)
-      (counsel-git)
-    (if (projectile-project-p)
-        (projectile-find-file)
-      (counsel-file-jump))))
+  (if (or (zilongshanren/vcs-project-root)
+          (projectile-project-p))
+      (counsel-projectile-find-file)
+    (counsel-file-jump)))
 
 
 ;; http://blog.lojic.com/2009/08/06/send-growl-notifications-from-carbon-emacs-on-osx/
@@ -430,9 +429,9 @@ With PREFIX, cd to project root."
     (do-applescript
      (format
       "
-  tell application \"iTerm\"
+  tell application \"iTerm2\"
        activate
-       set _session to current session of current terminal
+       set _session to current session of current window
        tell _session
             set command to get the clipboard
             write text \"%s\"
@@ -582,3 +581,13 @@ With PREFIX, cd to project root."
 (defun zilongshanren/search-in-fireball ()
   (interactive)
   (helm-do-ag (expand-file-name "~/Github/fireball/")))
+
+
+(defun zilongshanren/show-current-buffer-major-mode ()
+  (interactive)
+  (describe-variable 'major-mode))
+
+(defun zilongshanren/counsel-imenu ()
+  (interactive)
+  (counsel-imenu)
+  (evil-set-jump))

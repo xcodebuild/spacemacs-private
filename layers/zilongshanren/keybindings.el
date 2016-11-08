@@ -22,9 +22,8 @@
 (global-set-key (kbd "C-c a") 'org-agenda)
 (define-key global-map (kbd "C-c y") 'youdao-dictionary-search-at-point+)
 (define-key global-map (kbd "<f9>") 'org-capture)
-(global-set-key (kbd "C-M-=") 'spacemacs/scale-up-font)
-(global-set-key (kbd "C-M--") 'spacemacs/scale-down-font)
-(global-set-key (kbd "C-M-0") 'spacemacs/reset-font-size)
+(define-key global-map (kbd "C-c t") 'org-capture)
+(define-key global-map (kbd "<f8>") 'zilongshanren/show-current-buffer-major-mode)
 
 (global-set-key (kbd "C-c b") 'org-iswitchb)
 (global-set-key (kbd "C-c i e") 'spacemacs/auto-yasnippet-expand)
@@ -43,7 +42,7 @@
 (global-set-key (kbd "C-s-h") 'mark-defun)
 
 (global-set-key (kbd "s-l") 'goto-line)
-(global-set-key (kbd "s-s") 'save-buffer)
+;; (global-set-key (kbd "s-s") 'save-buffer)
 (global-set-key (kbd "C-`") 'toggle-input-method)
 (global-set-key (kbd "s-d") 'zilongshanren/my-mc-mark-next-like-this)
 (bind-key* "s-r" 'mc/reverse-regions)
@@ -73,11 +72,11 @@
 (bind-key* "s-," 'zilongshanren/insert-comma-at-the-end-of-this-line)
 ;; (bind-key* "C-s-," 'zilongshanren/delete-comma-at-the-end-of-this-line)
 (bind-key* "C-c l" 'zilongshanren/insert-chrome-current-tab-url)
-(bind-key* "M-s o" 'occur-dwim)
+;; (bind-key* "M-s o" 'occur-dwim)
 (bind-key* "C-=" 'er/expand-region)
 (bind-key* "M--" 'zilongshanren/goto-match-paren)
 (bind-key* "C-c k" 'which-key-show-top-level)
-(bind-key* "C-M-s-y" 'aya-expand)
+(bind-key* "s-y" 'aya-expand)
 ;; (bind-key* "C-l" 'recenter)
 
 
@@ -93,6 +92,7 @@
   "+" 'evil-numbers/inc-at-pt
   "-" 'evil-numbers/dec-at-pt
   "\\" 'evil-repeat-find-char-reverse
+  (kbd "DEL") 'evil-repeat-find-char-reverse
   "[s" (lambda (n) (interactive "p") (dotimes (c n nil) (insert " ")))
   "]s" (lambda (n) (interactive "p")
          (forward-char) (dotimes (c n nil) (insert " ")) (backward-char (1+ n))))
@@ -108,9 +108,8 @@
 (spacemacs/declare-prefix "ot" "Toggle")
 
 
-(if (configuration-layer/layer-usedp 'helm)
-    (progn (global-set-key (kbd "<f1>") 'zilongshanren/helm-hotspots)
-           (spacemacs/set-leader-keys "oo" 'zilongshanren/helm-hotspots)))
+(global-set-key (kbd "<f1>") 'zilongshanren/helm-hotspots)
+(spacemacs/set-leader-keys "oo" 'zilongshanren/helm-hotspots)
 
 (spacemacs/set-leader-keys "oc" 'my-auto-update-tags-when-save)
 (spacemacs/set-leader-keys "op" 'zilongshanren/org-save-and-export)
@@ -129,18 +128,16 @@
 (spacemacs/set-leader-keys "ox" 'org-open-at-point)
 (spacemacs/set-leader-keys "oac" 'zilongshanren/browser-refresh--chrome-applescript)
 
-;; helm specific keybindings
-(if (configuration-layer/layer-usedp 'helm)
-    (progn
-      (spacemacs/set-leader-keys "rh" 'helm-resume)
-      (spacemacs/set-leader-keys "sj" 'counsel-imenu)))
+(spacemacs/set-leader-keys "rh" 'helm-resume)
+(spacemacs/set-leader-keys "sj" 'counsel-imenu)
 
 ;; ivy specific keybindings
 (if (configuration-layer/layer-usedp 'ivy)
     (progn
       (spacemacs/set-leader-keys "ff" 'counsel-find-file)
       (spacemacs/set-leader-keys "fL" 'counsel-locate)
-      (spacemacs/set-leader-keys "hi" 'counsel-info-lookup-symbol)))
+      (spacemacs/set-leader-keys "hi" 'counsel-info-lookup-symbol)
+      (spacemacs/set-leader-keys "pb" 'projectile-switch-to-buffer)))
 
 (spacemacs/set-leader-keys "en" 'flycheck-next-error)
 (spacemacs/set-leader-keys "ep" 'flycheck-previous-error)
@@ -149,7 +146,7 @@
 (spacemacs/set-leader-keys "gL" 'magit-log-buffer-file)
 (spacemacs/set-leader-keys "og" 'my-git-timemachine)
 
-(spacemacs/set-leader-keys "sj" 'helm-imenu)
+(spacemacs/set-leader-keys "sj" 'zilongshanren/counsel-imenu)
 ;; deal with BOM
 (spacemacs/set-leader-keys "fl" 'find-file-literally-at-point)
 (spacemacs/set-leader-keys "ri" 'ivy-resume)
@@ -158,9 +155,27 @@
 (spacemacs/set-leader-keys "oll" 'zilongshanren/load-my-layout)
 (spacemacs/set-leader-keys "ols" 'zilongshanren/save-my-layout)
 (spacemacs/set-leader-keys "ob" 'popwin:display-last-buffer)
+(spacemacs/set-leader-keys "oy" 'youdao-dictionary-search-at-point+)
 
 (bind-key* "s-p" 'find-file-in-project)
 (spacemacs/set-leader-keys "os" 'zilongshanren/search-in-fireball)
 
 (spacemacs/set-leader-keys "pa" 'projectile-find-other-file)
 (spacemacs/set-leader-keys "pA" 'projectile-find-other-file-other-window)
+(spacemacs/set-leader-keys ":" 'counsel-M-x)
+(spacemacs/set-leader-keys "TAB" 'spacemacs/alternate-buffer-in-persp)
+
+(when (spacemacs/system-is-mswindows)
+  (global-set-key (kbd "s-=") 'spacemacs/scale-up-font)
+  (global-set-key (kbd "s--") 'spacemacs/scale-down-font)
+  (global-set-key (kbd "s-0") 'spacemacs/reset-font-size)
+  (global-set-key (kbd "s-q") 'save-buffers-kill-terminal)
+  (global-set-key (kbd "s-v") 'yank)
+  (global-set-key (kbd "s-c") 'evil-yank)
+  (global-set-key (kbd "s-a") 'mark-whole-buffer)
+  (global-set-key (kbd "s-x") 'kill-region)
+  (global-set-key (kbd "s-w") 'delete-window)
+  (global-set-key (kbd "s-W") 'delete-frame)
+  (global-set-key (kbd "s-n") 'make-frame)
+  (global-set-key (kbd "s-z") 'undo-tree-undo)
+  (global-set-key (kbd "s-Z") 'undo-tree-redo))

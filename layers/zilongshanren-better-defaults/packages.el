@@ -13,9 +13,32 @@
   '(
     (dired-mode :location built-in)
     (profiler :location built-in)
+    (recentf :location built-in)
     )
 )
 
+(defun zilongshanren-better-defaults/post-init-recentf ()
+  (progn
+    (setq recentf-exclude
+          '("COMMIT_MSG"
+            "COMMIT_EDITMSG"
+            "github.*txt$"
+            "/tmp/"
+            "/ssh:"
+            "/sudo:"
+            "/TAGS$"
+            "/GTAGS$"
+            "/GRAGS$"
+            "/GPATH$"
+            "\\.mkv$"
+            "\\.mp[34]$"
+            "\\.avi$"
+            "\\.pdf$"
+            "\\.sub$"
+            "\\.srt$"
+            "\\.ass$"
+            ".*png$"))
+    (setq recentf-max-saved-items 2048)))
 
 (defun zilongshanren-better-defaults/init-dired-mode ()
   (use-package dired-mode
@@ -39,6 +62,9 @@
               ("\\.html?\\'" "open")
               ("\\.md\\'" "open")))
 
+      (setq dired-omit-files
+      (concat dired-omit-files "\\|^.DS_STORE$\\|^.projectile$"))
+
       ;; always delete and copy recursively
       (setq dired-recursive-deletes 'always)
       (setq dired-recursive-copies 'always)
@@ -46,6 +72,7 @@
       (defvar dired-filelist-cmd
         '(("vlc" "-L")))
 
+      ;; FIXME: evilify dired mode will lead to startup warnings
       (evilified-state-evilify-map dired-mode-map
         :mode dired-mode
         :bindings

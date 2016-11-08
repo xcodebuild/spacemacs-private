@@ -214,11 +214,15 @@ version 2015-08-21"
     (string-match-p REGEX dir)))
 
 
+(defvar my-tags-updated-time nil)
+
 (defun my-create-tags-if-needed (SRC-DIR &optional FORCE)
   "return the full path of tags file"
   (let ((dir (file-name-as-directory (file-truename SRC-DIR)))
         file)
     (setq file (concat dir "TAGS"))
+    (when (spacemacs/system-is-mswindows)
+      (setq dir (substring dir 0 -1)))
     (when (or FORCE (not (file-exists-p file)))
       (message "Creating TAGS in %s ..." dir)
       (shell-command
