@@ -35,8 +35,9 @@
      ;; (clojure :variables clojure-enable-fancify-symbols t)
 ;;     ranger
 ;;     racket
-     (spacemacs-layouts :variables layouts-enable-autosave nil
-                        layouts-autosave-delay 300)
+     ;; (spacemacs-layouts :variables layouts-enable-autosave nil
+     ;;                    layouts-autosave-delay 300)
+     react
      ;; colors
      (git :variables
           git-magit-status-fullscreen t

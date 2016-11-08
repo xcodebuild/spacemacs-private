@@ -31,7 +31,7 @@
 
 (defconst codefalling-packages
   '(
-    nlinum
+    ;; nlinum
     )
   "The list of Lisp packages required by the codefalling layer.
 
