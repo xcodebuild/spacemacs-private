@@ -24,8 +24,8 @@
 ;;     gtags
      yaml
      ;; (ruby :variables ruby-version-manager 'rvm)
-     ;; (python :variables
-     ;;         python-test-runner '(nose pytest))
+     (python :variables
+             python-test-runner '(nose pytest))
 ;;     lua
      html
      javascript
@@ -68,7 +68,7 @@
                         leuven-theme gh-md evil-lisp-state spray lorem-ipsum
                         ac-ispell ace-jump-mode auto-complete auto-dictionary
                         clang-format define-word google-translate disaster epic
-                        fancy-battery neotree org-present orgit orglue spacemacs-theme
+                        fancy-battery org-present orgit orglue spacemacs-theme
                         helm-flyspell flyspell-correct-helm clean-aindent-mode
                         helm-c-yasnippet ace-jump-helm-line helm-make helm-projectile
                         helm-themes helm-swoop helm-spacemacs-help smeargle)
@@ -86,10 +86,10 @@
    dotspacemacs-startup-lists '((recents . 5)
                                 (projects . 7))
    dotspacemacs-scratch-mode 'text-mode
-   dotspacemacs-themes '(moe-dark dracula solarized-light solarized-dark)
+   dotspacemacs-themes '(apropospriate-light monokai anti-zenburn zenburn dracula moe-dark solarized-light solarized-dark)
    dotspacemacs-colorize-cursor-according-to-state t
    dotspacemacs-default-font '("Source Code Pro"
-                               :size 15
+                               :size 14
                                :weight normal
                                :width normal
                                :powerline-scale 1.1)
@@ -120,7 +120,7 @@
    dotspacemacs-fullscreen-at-startup nil
    dotspacemacs-fullscreen-use-non-native nil
    dotspacemacs-maximized-at-startup t
-   dotspacemacs-active-transparency 95
+   dotspacemacs-active-transparency 99
    dotspacemacs-inactive-transparency 90
    dotspacemacs-show-transient-state-title t
    dotspacemacs-show-transient-state-color-guide t
@@ -155,6 +155,8 @@
   )
 
 (defun dotspacemacs/user-config ()
+  (setq projectile-globally-ignored-directories '(".git" ".build" ".happypack"))
+
   ;;解决org表格里面中英文对齐的问题
   ;; (when (configuration-layer/layer-usedp 'chinese)
   ;;   (when (and (spacemacs/system-is-mac) window-system)

@@ -7,7 +7,19 @@
 (with-eval-after-load "evil-matchit-mode"
   (global-evil-matchit-mode))
 
-(with-eval-after-load ""AA)
 
-(add-hook 'after-init-hook
-          (lambda () (moe-theme-set-color 'w/b)))
+;; (defun codefalling//reset-eslint-rc ()
+;;   (interactive)
+;;   (let ((rc-path (concat (projectile-project-root) ".eslintrc")))
+;;     (if (file-exists-p rc-path)
+;;         (setq flycheck-eslintrc rc-path))))
+
+
+(defun codefalling//init ()
+  ;; (moe-theme-set-color 'w/b)
+  (add-hook 'prog-mode-hook 'flycheck-mode)
+  (add-hook 'prog-mode-hook 'editorconfig-mode)
+  (add-hook 'prog-mode-hook 'editorconfig-apply)
+  )
+
+(add-hook 'after-init-hook 'codefalling//init)
